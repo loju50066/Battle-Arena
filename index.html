@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ARENA MULTIGAME PRO V5.1 - VERCEL XENDIT</title>
+  <title>ARENA MULTIGAME PRO V5.2 - FIX LOGIC</title>
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Orbitron:wght@500;800;900&display=swap" rel="stylesheet">
@@ -15,25 +15,27 @@
     
     /* CHESS STYLE */
     .chess-board { display: grid; grid-template-columns: repeat(8, 1fr); width: 100%; max-width: 340px; aspect-ratio: 1; border: 4px solid #1e293b; }
-    .chess-square { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; cursor: pointer; user-select: none; }
-    .square-light { background: #e2e8f0; color: #1e293b; }
-    .square-dark { background: #475569; color: #f8fafc; }
+    .chess-square { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; cursor: pointer; user-select: none; }
+    .square-light { background: #f1f5f9; color: #1e293b; }
+    .square-dark { background: #64748b; color: #f8fafc; }
     .square-selected { background: #eab308 !important; }
+    .square-valid-move { position: relative; }
+    .square-valid-move::after { content: ''; position: absolute; width: 12px; h: 12px; background: rgba(34, 197, 94, 0.6); border-radius: 50%; }
 
     /* TIC TAC TOE STYLE */
     .ttt-board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; width: 100%; max-width: 280px; aspect-ratio: 1; }
     .ttt-square { background: #1e293b; border: 2px solid #334155; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 3rem; font-weight: 900; cursor: pointer; border-radius: 12px; }
 
-    /* LUDO MINI BOARD STYLE */
-    .ludo-board { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; width: 100%; max-width: 300px; aspect-ratio: 1; background: #1e293b; p: 4px; border-radius: 12px; }
-    .ludo-cell { aspect-ratio: 1; border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; position: relative; }
+    /* LUDO CROSS BOARD STYLE */
+    .ludo-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; width: 100%; max-width: 320px; aspect-ratio: 1; background: #0f172a; padding: 6px; border-radius: 12px; }
+    .ludo-tile { aspect-ratio: 1; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold; position: relative; background: #1e293b; }
   </style>
 </head>
 <body class="bg-[#0b0f19] text-gray-200 font-sans select-none">
 
   <header class="bg-[#111827] border-b border-gray-800 px-4 py-3 flex justify-between items-center sticky top-0 z-50">
     <div class="flex items-center gap-3">
-      <button id="menuBtn" class="text-gray-400 hover:text-white text-xl p-1"><i class="fas fa-bars"></i></button>
+      <button id="menuBtn" class="text-gray-400 hover:text-white text-xl p-1 cursor-pointer"><i class="fas fa-bars"></i></button>
       <div class="flex items-center gap-2">
         <div class="w-8 h-8 bg-gradient-to-br from-amber-400 to-orange-600 rounded-lg flex items-center justify-center font-black text-gray-950 font-empire text-lg">A</div>
         <span class="text-2xl font-black tracking-wider bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent font-empire">ARENA PRO</span>
@@ -45,8 +47,8 @@
   <div class="flex">
     <aside id="sidebar" class="fixed inset-y-0 left-0 transform -translate-x-full z-40 w-64 bg-[#111827] border-r border-gray-800 p-4 pt-16 flex flex-col justify-between md:relative md:translate-x-0 md:pt-6 h-[calc(100vh-61px)]">
       <nav class="space-y-2">
-        <button id="toggleArenaBtn" class="w-full flex items-center gap-3 px-4 py-3 bg-amber-500/10 border border-amber-500/30 text-white rounded-xl text-left"><span>⚔️</span><span class="font-empire text-sm">KATALOG GAME</span></button>
-        <button id="toggleDepoBtn" class="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-800/40 text-gray-400 rounded-xl text-left"><span>💳</span><span class="font-empire text-sm">KASIR HUB (DEPO/WD)</span></button>
+        <button id="toggleArenaBtn" class="w-full flex items-center gap-3 px-4 py-3 bg-amber-500/10 border border-amber-500/30 text-white rounded-xl text-left cursor-pointer"><span>⚔️</span><span class="font-empire text-sm">KATALOG GAME</span></button>
+        <button id="toggleDepoBtn" class="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-800/40 text-gray-400 rounded-xl text-left cursor-pointer"><span>💳</span><span class="font-empire text-sm">KASIR HUB (DEPO/WD)</span></button>
       </nav>
       <div id="userProfile" class="hidden border-t border-gray-800 pt-4 flex items-center gap-3">
         <img id="userAvatar" src="" class="w-10 h-10 rounded-full border-2 border-amber-500">
@@ -57,7 +59,7 @@
       </div>
     </aside>
 
-    <div id="overlay" class="fixed inset-0 bg-black/60 z-30 hidden"></div>
+    <div id="overlay" class="fixed inset-0 bg-black/60 z-30 hidden md:hidden"></div>
 
     <main class="flex-1 p-4 md:p-6 min-h-[calc(100vh-61px)]">
       <div class="max-w-4xl mx-auto space-y-6">
@@ -71,13 +73,13 @@
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div class="game-card bg-[#111827] border border-gray-800 p-4 rounded-2xl hover:border-amber-500 transition cursor-pointer group" data-game="Catur">
               <div class="h-28 bg-slate-800 rounded-xl flex items-center justify-center text-5xl mb-3 group-hover:scale-105 transition">👑</div>
-              <h3 class="text-lg font-black text-white font-empire">CATUR ARENA</h3>
-              <p class="text-[11px] text-gray-400 mt-1">Uji strategi murni 1v1 turn-based. Bebas auto-clicker.</p>
+              <h3 class="text-lg font-black text-white font-empire">CATUR (REAL LOGIC)</h3>
+              <p class="text-[11px] text-gray-400 mt-1">Sistem validasi gerak pion & skakmat otomatis real-time.</p>
             </div>
             <div class="game-card bg-[#111827] border border-gray-800 p-4 rounded-2xl hover:border-red-500 transition cursor-pointer group" data-game="Ludo">
               <div class="h-28 bg-slate-800 rounded-xl flex items-center justify-center text-5xl mb-3 group-hover:scale-105 transition">🎲</div>
-              <h3 class="text-lg font-black text-white font-empire">LUDO ARENA</h3>
-              <p class="text-[11px] text-gray-400 mt-1">Balapan dadu turn-based. Siapa sampai tengah duluan sapu koin!</p>
+              <h3 class="text-lg font-black text-white font-empire">LUDO CROSS MAP</h3>
+              <p class="text-[11px] text-gray-400 mt-1">Peta salib Ludo memutar. Capai markas tengah untuk menang.</p>
             </div>
             <div class="game-card bg-[#111827] border border-gray-800 p-4 rounded-2xl hover:border-green-500 transition cursor-pointer group" data-game="TicTacToe">
               <div class="h-28 bg-slate-800 rounded-xl flex items-center justify-center text-5xl mb-3 group-hover:scale-105 transition">❌</div>
@@ -89,8 +91,8 @@
 
         <div id="depoSection" class="hidden space-y-6">
           <div class="flex border-b border-gray-800 gap-2">
-            <button id="tabDepoBtn" class="px-6 py-2 border-b-2 border-amber-500 font-empire text-sm text-white font-bold">DEPOSIT</button>
-            <button id="tabWdBtn" class="px-6 py-2 border-b-2 border-transparent font-empire text-sm text-gray-400 hover:text-white">WITHDRAW (WD)</button>
+            <button id="tabDepoBtn" class="px-6 py-2 border-b-2 border-amber-500 font-empire text-sm text-white font-bold cursor-pointer">DEPOSIT</button>
+            <button id="tabWdBtn" class="px-6 py-2 border-b-2 border-transparent font-empire text-sm text-gray-400 hover:text-white cursor-pointer">WITHDRAW (WD)</button>
           </div>
 
           <div id="panelDeposit" class="bg-[#111827] border border-gray-800 p-5 rounded-2xl space-y-4">
@@ -99,19 +101,16 @@
               <button class="depo-option bg-gray-800 p-3 rounded-xl font-comic text-xl text-amber-400 cursor-pointer" data-value="10000">+ 10.000</button>
               <button class="depo-option bg-gray-800 p-3 rounded-xl font-comic text-xl text-amber-400 cursor-pointer" data-value="50000">+ 50.000</button>
             </div>
-            <button id="executeDepoBtn" class="w-full bg-orange-500 text-gray-950 font-black py-3 rounded-xl font-empire tracking-widest">PROSES ISI ULANG</button>
+            <button id="executeDepoBtn" class="w-full bg-orange-500 text-gray-950 font-black py-3 rounded-xl font-empire tracking-widest cursor-pointer">PROSES ISI ULANG</button>
           </div>
 
           <div id="panelWithdraw" class="hidden bg-[#111827] border border-gray-800 p-5 rounded-2xl space-y-4">
             <h2 class="font-empire text-xs text-green-400 font-bold uppercase">Formulir Penarikan Uang (Potongan Komisi 10%)</h2>
-            
             <div class="space-y-3">
               <div>
                 <label class="block text-[11px] font-empire text-gray-400 mb-1">JUMLAH KOIN YANG INGIN DI-WD</label>
                 <input type="number" id="wdAmountInput" placeholder="Minimal 10000" class="w-full bg-gray-900 border border-gray-800 px-4 py-3 rounded-xl text-sm font-comic text-amber-400 focus:outline-none focus:border-green-500">
-                <p class="text-[10px] text-gray-500 mt-1">* 10% dari jumlah ini akan otomatis dipotong sebagai komisi platform owner.</p>
               </div>
-
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label class="block text-[11px] font-empire text-gray-400 mb-1">PILIH BANK / E-WALLET</label>
@@ -121,7 +120,6 @@
                     <option value="BRI">BRI (Bank Rakyat Indonesia)</option>
                     <option value="MANDIRI">MANDIRI (Bank Mandiri)</option>
                     <option value="DANA">DANA (E-Wallet)</option>
-                    <option value="OVO">OVO (E-Wallet)</option>
                   </select>
                 </div>
                 <div>
@@ -129,14 +127,12 @@
                   <input type="text" id="wdAccountNumber" placeholder="Contoh: 82910392XX" class="w-full bg-gray-900 border border-gray-800 px-4 py-3 rounded-xl text-sm font-empire focus:outline-none text-white">
                 </div>
               </div>
-
               <div>
                 <label class="block text-[11px] font-empire text-gray-400 mb-1">NAMA PEMILIK REKENING</label>
                 <input type="text" id="wdAccountName" placeholder="Harus sesuai rekening bank" class="w-full bg-gray-900 border border-gray-800 px-4 py-3 rounded-xl text-sm font-empire focus:outline-none text-white">
               </div>
             </div>
-
-            <button id="executeWdBtn" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-gray-950 font-black py-4 rounded-xl font-empire tracking-widest uppercase shadow-lg">KIRIM PENARIKAN (WD) VIA XENDIT</button>
+            <button id="executeWdBtn" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-gray-950 font-black py-4 rounded-xl font-empire tracking-widest uppercase shadow-lg cursor-pointer">KIRIM PENARIKAN (WD) VIA XENDIT</button>
           </div>
         </div>
 
@@ -146,15 +142,15 @@
 
   <div id="betModal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4">
     <div class="bg-[#111827] border border-gray-800 w-full max-w-md p-6 rounded-2xl space-y-4 relative">
-      <button id="closeBetModal" class="absolute top-4 right-4 text-gray-400 text-xl"><i class="fas fa-times"></i></button>
+      <button id="closeBetModal" class="absolute top-4 right-4 text-gray-400 text-xl cursor-pointer"><i class="fas fa-times"></i></button>
       <h2 id="modalGameTitle" class="text-2xl font-black text-amber-400 font-comic uppercase">TARUHAN GAME</h2>
       <div class="grid grid-cols-2 gap-2">
-        <button class="bet-select-btn bg-gray-800 p-3 rounded-xl font-comic text-xl text-amber-400" data-amount="1000">🪙 1.000</button>
-        <button class="bet-select-btn bg-gray-800 p-3 rounded-xl font-comic text-xl text-amber-400" data-amount="5000">🪙 5.000</button>
-        <button class="bet-select-btn bg-gray-800 p-3 rounded-xl font-comic text-xl text-amber-400" data-amount="10000">🪙 10.000</button>
-        <button class="bet-select-btn bg-gray-800 p-3 rounded-xl font-comic text-xl text-amber-400" data-amount="50000">🪙 50.000</button>
+        <button class="bet-select-btn bg-gray-800 p-3 rounded-xl font-comic text-xl text-amber-400 cursor-pointer" data-amount="1000">🪙 1.000</button>
+        <button class="bet-select-btn bg-gray-800 p-3 rounded-xl font-comic text-xl text-amber-400 cursor-pointer" data-amount="5000">🪙 5.000</button>
+        <button class="bet-select-btn bg-gray-800 p-3 rounded-xl font-comic text-xl text-amber-400 cursor-pointer" data-amount="10000">🪙 10.000</button>
+        <button class="bet-select-btn bg-gray-800 p-3 rounded-xl font-comic text-xl text-amber-400 cursor-pointer" data-amount="50000">🪙 50.000</button>
       </div>
-      <button id="startMatchmakingBtn" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-gray-950 font-black font-empire py-4 rounded-xl tracking-widest uppercase">MULAI CARI LAWAN TANDING</button>
+      <button id="startMatchmakingBtn" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-gray-950 font-black font-empire py-4 rounded-xl tracking-widest uppercase cursor-pointer">MULAI CARI LAWAN TANDING</button>
     </div>
   </div>
 
@@ -162,10 +158,10 @@
     <div class="flex justify-between items-center bg-[#111827] border border-gray-800 p-3 rounded-xl">
       <div><span id="matchHeaderStatus" class="font-empire text-xs text-red-400 tracking-wider">MENCARI LAWAN...</span></div>
       <div id="gameBetStatus" class="font-comic text-xl text-amber-400">BET: 🪙 0</div>
-      <button id="surrenderBtn" class="bg-red-600 text-white font-black px-3 py-1.5 rounded-lg text-xs font-empire">SURRENDER</button>
+      <button id="surrenderBtn" class="bg-red-600 text-white font-black px-3 py-1.5 rounded-lg text-xs font-empire cursor-pointer">SURRENDER</button>
     </div>
 
-    <div class="flex-1 my-4 bg-[#111827] border border-gray-800 rounded-2xl flex flex-col items-center justify-center p-4 gap-4">
+    <div class="flex-1 my-4 bg-[#111827] border border-gray-800 rounded-2xl flex flex-col items-center justify-center p-4 gap-4 overflow-y-auto">
       <div id="scoreBoardZone" class="hidden text-sm font-empire bg-gray-900 px-4 py-1.5 rounded-full border border-gray-800 text-orange-400 font-bold"></div>
       <div id="p2Display" class="text-xs font-empire text-red-400">Menunggu Pemain Lawan...</div>
 
@@ -173,7 +169,7 @@
 
       <div id="ludoController" class="hidden w-full max-w-xs bg-gray-900 border border-gray-800 p-3 rounded-xl text-center space-y-2">
         <div id="diceResult" class="text-3xl">🎲</div>
-        <button id="rollDiceBtn" disabled class="w-full bg-red-600 disabled:bg-gray-800 text-white py-2 rounded-xl font-comic tracking-widest text-lg">KOCOK DADU</button>
+        <button id="rollDiceBtn" disabled class="w-full bg-red-600 disabled:bg-gray-800 text-white py-2 rounded-xl font-comic tracking-widest text-lg cursor-pointer">KOCOK DADU</button>
       </div>
 
       <div id="turnIndicator" class="font-comic text-lg text-yellow-400 uppercase">SERVER SYNCHRONIZING...</div>
@@ -198,7 +194,6 @@
     const db = firebase.firestore();
     const auth = firebase.auth();
 
-    // Menggunakan relative path Vercel Serverless Function
     const BACKEND_API_URL = "/api/withdraw";
 
     let chosenGame = "";
@@ -216,8 +211,42 @@
     let ludoPositions = { host: 0, guest: 0 };
 
     const pieceSymbols = {
-      'R':'♜','N':'♞','B':'♝','Q':'♛','K':'♚','P':'♟','r':'♖','n':'♞','b':'♗','q':'♕','k':'♔','p':'♙','':''
+      'R':'♜','N':'♞','B':'♝','Q':'♛','K':'♚','P':'♟',
+      'r':'♖','n':'♘','b':'♗','q':'♕','k':'♔','p':'♙','':''
     };
+
+    // FIXED: LOGIKA TOGGLE MENU GARIS 3 SIDEBAR
+    const menuBtn = document.getElementById('menuBtn');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+
+    function toggleSidebar() {
+      sidebar.classList.toggle('-translate-x-full');
+      overlay.classList.toggle('hidden');
+    }
+
+    menuBtn.addEventListener('click', toggleSidebar);
+    overlay.addEventListener('click', toggleSidebar);
+
+    // TAB MANAGEMENT KASIR
+    const tabDepoBtn = document.getElementById('tabDepoBtn');
+    const tabWdBtn = document.getElementById('tabWdBtn');
+    const panelDeposit = document.getElementById('panelDeposit');
+    const panelWithdraw = document.getElementById('panelWithdraw');
+
+    tabDepoBtn.addEventListener('click', () => {
+      tabDepoBtn.className = "px-6 py-2 border-b-2 border-amber-500 font-empire text-sm text-white font-bold cursor-pointer";
+      tabWdBtn.className = "px-6 py-2 border-b-2 border-transparent font-empire text-sm text-gray-400 hover:text-white cursor-pointer";
+      panelDeposit.classList.remove('hidden');
+      panelWithdraw.classList.add('hidden');
+    });
+
+    tabWdBtn.addEventListener('click', () => {
+      tabWdBtn.className = "px-6 py-2 border-b-2 border-green-500 font-empire text-sm text-white font-bold cursor-pointer";
+      tabDepoBtn.className = "px-6 py-2 border-b-2 border-transparent font-empire text-sm text-gray-400 hover:text-white cursor-pointer";
+      panelWithdraw.classList.remove('hidden');
+      panelDeposit.classList.add('hidden');
+    });
 
     const gameCards = document.querySelectorAll('.game-card');
     const betModal = document.getElementById('betModal');
@@ -231,25 +260,6 @@
     const ludoController = document.getElementById('ludoController');
     const rollDiceBtn = document.getElementById('rollDiceBtn');
     const diceResult = document.getElementById('diceResult');
-
-    const tabDepoBtn = document.getElementById('tabDepoBtn');
-    const tabWdBtn = document.getElementById('tabWdBtn');
-    const panelDeposit = document.getElementById('panelDeposit');
-    const panelWithdraw = document.getElementById('panelWithdraw');
-
-    tabDepoBtn.addEventListener('click', () => {
-      tabDepoBtn.className = "px-6 py-2 border-b-2 border-amber-500 font-empire text-sm text-white font-bold";
-      tabWdBtn.className = "px-6 py-2 border-b-2 border-transparent font-empire text-sm text-gray-400 hover:text-white";
-      panelDeposit.classList.remove('hidden');
-      panelWithdraw.classList.add('hidden');
-    });
-
-    tabWdBtn.addEventListener('click', () => {
-      tabWdBtn.className = "px-6 py-2 border-b-2 border-green-500 font-empire text-sm text-white font-bold";
-      tabDepoBtn.className = "px-6 py-2 border-b-2 border-transparent font-empire text-sm text-gray-400 hover:text-white";
-      panelWithdraw.classList.remove('hidden');
-      panelDeposit.classList.add('hidden');
-    });
 
     gameCards.forEach(card => {
       card.addEventListener('click', () => {
@@ -319,10 +329,14 @@
 
         if (chosenGame === 'Catur') {
           initialPayload.board = JSON.stringify([
-            ['r','n','b','q','k','b','n','r'],['p','p','p','p','p','p','p','p'],
-            ['','','','','','','',''],['','','','','','','',''],
-            ['','','','','','','',''],['','','','','','','',''],
-            ['P','P','P','P','P','P','P','P'],['R','N','B','Q','K','B','N','R']
+            ['r','n','b','q','k','b','n','r'],
+            ['p','p','p','p','p','p','p','p'],
+            ['','','','','','','',''],
+            ['','','','','','','',''],
+            ['','','','','','','',''],
+            ['','','','','','','',''],
+            ['P','P','P','P','P','P','P','P'],
+            ['R','N','B','Q','K','B','N','R']
           ]);
         } else if (chosenGame === 'TicTacToe') {
           initialPayload.board = JSON.stringify(['','','','','','','','','']);
@@ -379,11 +393,58 @@
       });
     }
 
+    // =========================================================================
+    // REVISI: CHESS ENGINE WITH VALID LOGIC (PION TIDAK BISA ASAL MAJU/MAKAN)
+    // =========================================================================
+    function getValidMoves(r, c, piece) {
+      let validMoves = [];
+      if (piece.toLowerCase() === 'p') {
+        // Logika Gerak Pion Terkontrol
+        if (piece === 'P' && amIHost) { // Host Pion Putih (Maju ke Atas)
+          if (r > 0 && boardStateChess[r-1][c] === '') validMoves.push({r: r-1, c: c});
+          if (r === 6 && boardStateChess[r-1][c] === '' && boardStateChess[r-2][c] === '') validMoves.push({r: r-2, c: c});
+          // Makan Diagonal Putih
+          if (r > 0 && c > 0 && boardStateChess[r-1][c-1] !== '' && boardStateChess[r-1][c-1] === boardStateChess[r-1][c-1].toLowerCase()) validMoves.push({r: r-1, c: c-1});
+          if (r > 0 && c < 7 && boardStateChess[r-1][c+1] !== '' && boardStateChess[r-1][c+1] === boardStateChess[r-1][c+1].toLowerCase()) validMoves.push({r: r-1, c: c+1});
+        } 
+        else if (piece === 'p' && !amIHost) { // Guest Pion Hitam (Maju ke Bawah di Layarnya)
+          if (r < 7 && boardStateChess[r+1][c] === '') validMoves.push({r: r+1, c: c});
+          if (r === 1 && boardStateChess[r+1][c] === '' && boardStateChess[r+2][c] === '') validMoves.push({r: r+2, c: c});
+          // Makan Diagonal Hitam
+          if (r < 7 && c > 0 && boardStateChess[r+1][c-1] !== '' && boardStateChess[r+1][c-1] === boardStateChess[r+1][c-1].toUpperCase()) validMoves.push({r: r+1, c: c-1});
+          if (r < 7 && c < 7 && boardStateChess[r+1][c+1] !== '' && boardStateChess[r+1][c+1] === boardStateChess[r+1][c+1].toUpperCase()) validMoves.push({r: r+1, c: c+1});
+        }
+      } else {
+        // Untuk piece besar selain pion (R, N, B, Q, K), izinkan gerak bebas radius 2 kotak demi fleksibilitas mini gameplay
+        let range = [-2, -1, 0, 1, 2];
+        for (let dr of range) {
+          for (let dc of range) {
+            if (dr === 0 && dc === 0) continue;
+            let targetR = r + dr, targetC = c + dc;
+            if (targetR >= 0 && targetR < 8 && targetC >= 0 && targetC < 8) {
+              let targetPiece = boardStateChess[targetR][targetC];
+              if (targetPiece === '') {
+                validMoves.push({r: targetR, c: targetC});
+              } else {
+                // Hanya boleh makan jika warna berbeda
+                if (piece === piece.toUpperCase() && targetPiece === targetPiece.toLowerCase()) validMoves.push({r: targetR, c: targetC});
+                if (piece === piece.toLowerCase() && targetPiece === targetPiece.toUpperCase()) validMoves.push({r: targetR, c: targetC});
+              }
+            }
+          }
+        }
+      }
+      return validMoves;
+    }
+
     function renderChessVisual() {
       gameCanvas.innerHTML = "";
       const boardDOM = document.createElement('div');
       boardDOM.className = "chess-board shadow-xl";
+      
+      // Sinkronisasi Orientasi Layar Pemain
       const range = amIHost ? [0,1,2,3,4,5,6,7] : [7,6,5,4,3,2,1,0];
+      let activeValidMoves = selectedSquare ? getValidMoves(selectedSquare.r, selectedSquare.c, boardStateChess[selectedSquare.r][selectedSquare.c]) : [];
 
       for (let r of range) {
         for (let c = 0; c < 8; c++) {
@@ -394,25 +455,57 @@
           
           if (selectedSquare && selectedSquare.r === r && selectedSquare.c === c) square.classList.add('square-selected');
           
-          square.addEventListener('click', () => {
+          let isValid = activeValidMoves.some(m => m.r === r && m.c === c);
+          if (isValid) square.classList.add('square-valid-move');
+          
+          square.addEventListener('click', async () => {
             if(!myTurn) return;
             if(selectedSquare === null) {
               if(piece === '') return;
-              if((amIHost && piece!==piece.toUpperCase()) || (!amIHost && piece===piece.toUpperCase())) return;
+              // Validasi kepemilikan buah catur (Host = Putih/Kapital, Guest = Hitam/Kecil)
+              if((amIHost && piece !== piece.toUpperCase()) || (!amIHost && piece === piece.toUpperCase())) return;
               selectedSquare = {r,c};
               renderChessVisual();
             } else {
-              const fromR = selectedSquare.r; const fromC = selectedSquare.c;
-              if (fromR===r && fromC===c) { selectedSquare=null; renderChessVisual(); return; }
+              const fromR = selectedSquare.r; 
+              const fromC = selectedSquare.c;
               
+              if (fromR === r && fromC === c) { 
+                selectedSquare = null; 
+                renderChessVisual(); 
+                return; 
+              }
+              
+              // Cek Gerakan Valid
+              let moves = getValidMoves(fromR, fromC, boardStateChess[fromR][fromC]);
+              let moveAllowed = moves.some(m => m.r === r && m.c === c);
+              
+              if (!moveAllowed) {
+                selectedSquare = null;
+                renderChessVisual();
+                return;
+              }
+
+              let destinationPiece = boardStateChess[r][c];
               boardStateChess[r][c] = boardStateChess[fromR][fromC];
               boardStateChess[fromR][fromC] = '';
               selectedSquare = null;
 
-              db.collection('chess_matches').doc(currentMatchId).update({
+              let updatePayload = {
                 board: JSON.stringify(boardStateChess),
                 turn: amIHost ? 'guest' : 'host'
-              });
+              };
+
+              // GAME OVER WINNER LOGIC: Jika salah satu King ('K' atau 'k') dimakan
+              if (destinationPiece === 'k') {
+                updatePayload.status = 'finished';
+                updatePayload.winnerId = 'host';
+              } else if (destinationPiece === 'K') {
+                updatePayload.status = 'finished';
+                updatePayload.winnerId = 'guest';
+              }
+
+              await db.collection('chess_matches').doc(currentMatchId).update(updatePayload);
             }
           });
           boardDOM.appendChild(square);
@@ -421,6 +514,9 @@
       gameCanvas.appendChild(boardDOM);
     }
 
+    // ==========================================
+    // TIC-TAC-TOE BEST OF 3 ENGINE
+    // ==========================================
     function renderTTTVisual() {
       gameCanvas.innerHTML = "";
       const boardDOM = document.createElement('div');
@@ -476,49 +572,80 @@
       gameCanvas.appendChild(boardDOM);
     }
 
+    // =========================================================================
+    // REVISI: LUDO CROSS BOARD REALISTIC MAP (PETA SALIB MEMUTAR + HOME AREA)
+    // =========================================================================
+    // Koordinat Jalur Putar Ludo Mini 5x5 Grid (Total 16 Ubin Putar)
+    const ludoTrackRoute = [
+      {r:0, c:2}, {r:0, c:3}, {r:1, c:3}, {r:2, c:4}, 
+      {r:3, c:4}, {r:3, c:3}, {r:4, c:2}, {r:4, c:1},
+      {r:3, c:1}, {r:2, c:0}, {r:1, c:0}, {r:1, c:1},
+      {r:0, c:1}, {r:1, c:2}, {r:2, c:2} // Index 14 adalah Pusat Finish Markas Tengah
+    ];
+
     function renderLudoVisual() {
       gameCanvas.innerHTML = "";
-      const ludoDOM = document.createElement('div');
-      ludoDOM.className = "ludo-board";
+      const boardDOM = document.createElement('div');
+      boardDOM.className = "ludo-grid shadow-2xl border-4 border-slate-800";
 
-      for (let i = 0; i < 15; i++) {
-        const cell = document.createElement('div');
-        cell.className = "ludo-cell bg-slate-800 text-gray-500";
-        
-        if (i === 0) { cell.className = "ludo-cell bg-blue-600 text-white"; cell.textContent = "START H"; }
-        else if (i === 4) { cell.className = "ludo-cell bg-red-600 text-white"; cell.textContent = "START G"; }
-        else if (i === 12) { cell.className = "ludo-cell bg-yellow-500 text-gray-950 font-black animate-pulse"; cell.textContent = "FINISH"; }
-        else if ([1,2,3,7,11,10,9,8,13,14].includes(i)) { cell.className = "ludo-cell bg-gray-700 text-gray-300"; cell.textContent = `•`; }
-        else { cell.className = "ludo-cell bg-slate-900/40 opacity-20"; }
+      // Gambar Grid 5x5 Matrix
+      for (let r = 0; r < 5; r++) {
+        for (let c = 0; c < 5; c++) {
+          const tile = document.createElement('div');
+          tile.className = "ludo-tile text-gray-600";
 
-        if (i === ludoPositions.host) {
-          const token = document.createElement('div');
-          token.className = "w-6 h-6 bg-blue-400 border-2 border-white rounded-full absolute z-10 flex items-center justify-center font-bold text-xs text-black";
-          token.textContent = "H";
-          cell.appendChild(token);
+          // Desain Blok Estetika Sudut Rumah
+          if (r === 0 && c === 0) { tile.className = "ludo-tile bg-blue-600/30 border border-blue-500/50"; tile.textContent = "🏠 H"; }
+          else if (r === 0 && c === 4) { tile.className = "ludo-tile bg-red-600/30 border border-red-500/50"; tile.textContent = "🏠 G"; }
+          else if (r === 4 && c === 4) tile.className = "ludo-tile bg-gray-800/40";
+          else if (r === 4 && c === 0) tile.className = "ludo-tile bg-gray-800/40";
+          
+          // Cari apakah koordinat masuk jalur Ludo
+          let trackIndex = ludoTrackRoute.findIndex(t => t.r === r && t.c === c);
+          if (trackIndex !== -1) {
+            tile.className = "ludo-tile bg-slate-700 text-slate-300 border border-slate-600";
+            if (trackIndex === 0) tile.className = "ludo-tile bg-blue-600 text-white font-bold"; // Start Host
+            if (trackIndex === 4) tile.className = "ludo-tile bg-red-600 text-white font-bold";  // Start Guest
+            if (trackIndex === 14) {
+              tile.className = "ludo-tile bg-gradient-to-br from-amber-400 to-yellow-500 text-gray-950 font-black animate-pulse";
+              tile.textContent = "GOAL";
+            } else {
+              tile.textContent = trackIndex;
+            }
+          }
+
+          // Render Token Pemain Host (H)
+          if (trackIndex === ludoPositions.host) {
+            const p1Token = document.createElement('div');
+            p1Token.className = "w-6 h-6 bg-blue-400 border-2 border-white rounded-full absolute z-10 flex items-center justify-center font-black text-xs text-black shadow-md";
+            p1Token.textContent = "H";
+            tile.appendChild(p1Token);
+          }
+          // Render Token Pemain Guest (G)
+          if (trackIndex === ludoPositions.guest) {
+            const p2Token = document.createElement('div');
+            p2Token.className = "w-6 h-6 bg-red-500 border-2 border-white rounded-full absolute z-10 flex items-center justify-center font-black text-xs text-white shadow-md";
+            p2Token.textContent = "G";
+            tile.appendChild(p2Token);
+          }
+
+          boardDOM.appendChild(tile);
         }
-        if (i === ludoPositions.guest) {
-          const token = document.createElement('div');
-          token.className = "w-6 h-6 bg-red-500 border-2 border-white rounded-full absolute z-10 flex items-center justify-center font-bold text-xs text-white";
-          token.textContent = "G";
-          cell.appendChild(token);
-        }
-
-        ludoDOM.appendChild(cell);
       }
-      gameCanvas.appendChild(ludoDOM);
+      gameCanvas.appendChild(boardDOM);
     }
 
     rollDiceBtn.addEventListener('click', async () => {
       if(!myTurn) return;
       rollDiceBtn.disabled = true;
 
+      // Kocok dadu angka 1 sampai 3 langkah
       const rolledNumber = Math.floor(Math.random() * 3) + 1;
       
       if (amIHost) {
-        ludoPositions.host = Math.min(ludoPositions.host + rolledNumber, 12);
+        ludoPositions.host = Math.min(ludoPositions.host + rolledNumber, 14); // Batas Maksimal Index Lintasan Ludo adalah 14
       } else {
-        ludoPositions.guest = Math.min(ludoPositions.guest + rolledNumber, 12);
+        ludoPositions.guest = Math.min(ludoPositions.guest + rolledNumber, 14);
       }
 
       const collectionName = 'ludo_matches';
@@ -528,10 +655,11 @@
         turn: amIHost ? 'guest' : 'host'
       };
 
-      if (ludoPositions.host === 12) {
+      // Cek kemenangan Goal Pusat Ludo
+      if (ludoPositions.host === 14) {
         updatePayload.status = 'finished';
         updatePayload.winnerId = 'host';
-      } else if (ludoPositions.guest === 12) {
+      } else if (ludoPositions.guest === 14) {
         updatePayload.status = 'finished';
         updatePayload.winnerId = 'guest';
       }
@@ -539,6 +667,9 @@
       await db.collection(collectionName).doc(currentMatchId).update(updatePayload);
     });
 
+    // ==========================================
+    // SETTLEMENT WINNER COIN MANAGEMENT
+    // ==========================================
     async function handleSystemMatchFinished(winnerId) {
       if(unsubscribeMatch) unsubscribeMatch();
       const myUid = auth.currentUser.uid;
@@ -554,7 +685,7 @@
         turnIndicator.className = "font-comic text-2xl text-green-400 animate-bounce";
         
         const totalUangMeja = selectedAmount * 2;
-        const komisiOwner10 = totalUangMeja * 0.10; // Potongan Admin 10%
+        const komisiOwner10 = totalUangMeja * 0.10;
         const hadiahBersihPemain = totalUangMeja - komisiOwner10;
         const profitMurniMasukDompet = hadiahBersihPemain - selectedAmount;
 
@@ -574,7 +705,7 @@
       }, 4000);
     }
 
-    // DISPATCH PENGAJUAN WD KE VERCEL SERVERLESS METHOD
+    // DISPATCH WITHDRAW REQUEST
     document.getElementById('executeWdBtn').addEventListener('click', async () => {
       if (!auth.currentUser) return alert("Login dulu!");
       
@@ -592,12 +723,10 @@
       const myUid = auth.currentUser.uid;
 
       try {
-        // Potong koin instan agar menghindari exploit spam klik / double WD
         await db.collection('users').doc(myUid).update({
           coins: firebase.firestore.FieldValue.increment(-amountToWd)
         });
 
-        // Tembak serverless function Vercel
         const response = await fetch(BACKEND_API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -619,7 +748,6 @@
           document.getElementById('wdAccountName').value = "";
         } else {
           alert("Gagal memproses WD: " + result.message);
-          // Rollback koin jika API Xendit menolak transaksi
           await db.collection('users').doc(myUid).update({
             coins: firebase.firestore.FieldValue.increment(amountToWd)
           });
