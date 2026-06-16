@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ARENA MULTIGAME PRO V6.0 - PRODUCTION READY</title>
+  <title>ARENA MULTIGAME PRO V6.2 - PRODUCTION READY</title>
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Orbitron:wght@500;800;900&display=swap" rel="stylesheet">
@@ -46,15 +46,31 @@
 
   <div class="flex">
     <aside id="sidebar" class="fixed inset-y-0 left-0 transform -translate-x-full z-40 w-64 bg-[#111827] border-r border-gray-800 p-4 pt-16 flex flex-col justify-between md:relative md:translate-x-0 md:pt-6 h-[calc(100vh-61px)]">
-      <nav class="space-y-2">
-        <button id="toggleArenaBtn" class="w-full flex items-center gap-3 px-4 py-3 bg-amber-500/10 border border-amber-500/30 text-white rounded-xl text-left cursor-pointer"><span>⚔️</span><span class="font-empire text-sm">KATALOG GAME</span></button>
-        <button id="toggleDepoBtn" class="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-800/40 text-gray-400 rounded-xl text-left cursor-pointer"><span>💳</span><span class="font-empire text-sm">KASIR HUB (DEPO/WD)</span></button>
-      </nav>
-      <div id="userProfile" class="hidden border-t border-gray-800 pt-4 flex items-center gap-3">
-        <img id="userAvatar" src="" class="w-10 h-10 rounded-full border-2 border-amber-500">
-        <div class="overflow-hidden">
-          <p id="userName" class="text-sm font-bold text-white truncate font-empire"></p>
-          <p id="userCoins" class="text-sm text-amber-400 font-black font-comic">🪙 0 KOIN</p>
+      <div class="flex flex-col flex-1 justify-between">
+        <nav class="space-y-2">
+          <button id="toggleArenaBtn" class="w-full flex items-center gap-3 px-4 py-3 bg-amber-500/10 border border-amber-500/30 text-white rounded-xl text-left cursor-pointer"><span>⚔️</span><span class="font-empire text-sm">KATALOG GAME</span></button>
+          <button id="toggleDepoBtn" class="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-800/40 text-gray-400 rounded-xl text-left cursor-pointer"><span>💳</span><span class="font-empire text-sm">KASIR HUB (DEPO/WD)</span></button>
+          
+          <div class="border-t border-gray-800/60 my-4"></div>
+          
+          <a href="https://wa.me/628xxxxxxxxxx" target="_blank" class="w-full flex items-center gap-3 px-4 py-3 bg-emerald-600/10 border border-emerald-500/30 hover:bg-emerald-600/20 text-emerald-400 rounded-xl text-left transition cursor-pointer">
+            <i class="fas fa-headset text-lg"></i>
+            <span class="font-empire text-sm font-bold">LIVE CHAT CS</span>
+          </a>
+        </nav>
+
+        <div id="userProfile" class="hidden border-t border-gray-800 pt-4 space-y-3">
+          <div class="flex items-center gap-3">
+            <img id="userAvatar" src="" class="w-10 h-10 rounded-full border-2 border-amber-500">
+            <div class="overflow-hidden">
+              <p id="userName" class="text-sm font-bold text-white truncate font-empire"></p>
+              <p id="userCoins" class="text-sm text-amber-400 font-black font-comic">🪙 0 KOIN</p>
+            </div>
+          </div>
+          
+          <button id="logoutBtn" class="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-red-900/60 to-red-600/40 border border-red-500/40 hover:from-red-600 hover:to-red-700 text-white font-bold py-2.5 rounded-xl text-xs font-empire tracking-wider transition cursor-pointer shadow-md">
+            <i class="fas fa-sign-out-alt"></i> KELUAR ARENA (LOGOUT)
+          </button>
         </div>
       </div>
     </aside>
@@ -182,7 +198,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
   <script>
-    // 1. CONFIG ENGINE ARCHITECTURE
+    // CONFIG ENGINE ARCHITECTURE
     const firebaseConfig = {
       apiKey: "AIzaSyAvGeziF9PkZpWMGAv9RF8ZpWK_0eYUHRI",
       authDomain: "battle-arena-bd9e4.firebaseapp.com",
@@ -211,21 +227,33 @@
     let boardStateTTT = [];
     let ludoPositions = { host: 0, guest: 0 };
 
-    // UNIFIED UNICODE BIDAK CHESS DESIGN
     const pieceSymbols = {
-      'R':'♜','N':'♞','B':'♝','Q':'♛','K':'♚','P':'♟', // HOST
-      'r':'♜','n':'♞','b':'♝','q':'♛','k':'♚','p':'♟', // GUEST
+      'R':'♜','N':'♞','B':'♝','Q':'♛','K':'♚','P':'♟',
+      'r':'♜','n':'♞','b':'♝','q':'♛','k':'♚','p':'♟',
       '':''
     };
 
-    // 2. STABLE USER AUTHENTICATION DISPATCHER
+    // STABLE USER AUTHENTICATION DISPATCHER
     const loginBtn = document.getElementById('loginBtn');
     loginBtn.addEventListener('click', () => {
       const provider = new firebase.auth.GoogleAuthProvider();
       auth.signInWithPopup(provider).catch(err => alert("Gagal Login OAuth: " + err.message));
     });
 
-    // 3. REVISED: FIXED UI NAVIGATION & LINE SELECTION ENGINE
+    // TAMBAHAN: SYSTEM LOGOUT TRIGGER ENGINE
+    const logoutBtn = document.getElementById('logoutBtn');
+    logoutBtn.addEventListener('click', () => {
+      if(confirm("Apakah Anda yakin ingin keluar dari Arena Pertandingan? Sesi Anda akan diakhiri.")) {
+        auth.signOut()
+          .then(() => {
+            alert("Berhasil keluar. Sampai jumpa kembali, Prajurit!");
+            location.reload(); // Refresh total untuk clear state memory cache
+          })
+          .catch(err => alert("Gagal memproses Logout: " + err.message));
+      }
+    });
+
+    // FIXED UI NAVIGATION & LINE SELECTION ENGINE
     const menuBtn = document.getElementById('menuBtn');
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('overlay');
@@ -258,7 +286,6 @@
     toggleArenaBtn.addEventListener('click', () => switchNavigationTab('arena'));
     toggleDepoBtn.addEventListener('click', () => switchNavigationTab('depo'));
 
-    // FINANCIAL TAB SWITCHER (DEPO / WD INSIDE KASIR PANEL)
     const tabDepoBtn = document.getElementById('tabDepoBtn');
     const tabWdBtn = document.getElementById('tabWdBtn');
     const panelDeposit = document.getElementById('panelDeposit');
@@ -277,7 +304,6 @@
       panelDeposit.classList.add('hidden');
     });
 
-    // REVISED: MANUAL DYNAMIC DEPOSIT EXECUTION
     document.getElementById('executeDepoBtn').addEventListener('click', async () => {
       if(!auth.currentUser) return alert("Silakan masuk arena terlebih dahulu!");
       const amount = parseInt(document.getElementById('manualDepoInput').value);
@@ -290,7 +316,6 @@
       document.getElementById('manualDepoInput').value = "";
     });
 
-    // 4. LOBBY ENTRY MODAL CONTROLLER
     const gameCards = document.querySelectorAll('.game-card');
     const betModal = document.getElementById('betModal');
     const modalGameTitle = document.getElementById('modalGameTitle');
@@ -323,13 +348,13 @@
     });
 
     startMatchmakingBtn.addEventListener('click', () => {
-      if (selectedAmount <= 0) return alert("Pilih Nominal Taruhan Bet Terlebih Dahulu!");
-      if (userCurrentCoins < selectedAmount) return alert("Saldo Koin Dompet Anda Tidak Mencukupi!");
+      if(selectedAmount === 0) return alert("Pilih nominal taruhan bet dulu!");
+      if(userCurrentCoins < selectedAmount) return alert("Koin Anda tidak cukup untuk memasang taruhan di room ini!");
       betModal.classList.add('hidden');
       executeServerMatchmaking();
     });
 
-    // 5. SYNCHRONIZED MULTIPLAYER MATCHMAKING MECHANICS
+    // SYNCHRONIZED MULTIPLAYER MATCHMAKING MECHANICS
     async function executeServerMatchmaking() {
       const user = auth.currentUser;
       document.getElementById('p1Display').textContent = `YOU: ${user.displayName}`;
@@ -337,7 +362,17 @@
       
       scoreBoardZone.classList.add('hidden');
       ludoController.classList.add('hidden');
-      gameCanvas.innerHTML = "<p class='text-gray-500 text-xs font-empire uppercase animate-pulse'>Memindai Server Lobby...</p>";
+      
+      gameCanvas.innerHTML = `
+        <div class="flex flex-col items-center gap-3 py-8">
+          <i class="fas fa-spinner fa-spin text-4xl text-amber-400"></i>
+          <p class='text-amber-400 text-sm font-empire uppercase animate-pulse tracking-widest'>Mencari Lawan Tanding...</p>
+        </div>
+      `;
+      document.getElementById('matchHeaderStatus').textContent = "MENCARI LAWAN...";
+      document.getElementById('p2Display').textContent = "Menunggu Pemain Lawan...";
+      turnIndicator.textContent = "SERVER SYNCHRONIZING...";
+      
       inGameScreen.classList.remove('hidden');
 
       const collectionName = chosenGame === 'Catur' ? 'chess_matches' : (chosenGame === 'Ludo' ? 'ludo_matches' : 'ttt_matches');
@@ -350,7 +385,7 @@
       if (!snapshot.empty) {
         const matchDoc = snapshot.docs[0];
         currentMatchId = matchDoc.id;
-        amIHost = false; // Player 2 (Bidak Hitam)
+        amIHost = false;
 
         await db.collection(collectionName).doc(currentMatchId).update({
           status: 'playing',
@@ -359,7 +394,7 @@
         });
       } else {
         currentMatchId = user.uid + "_" + Date.now();
-        amIHost = true; // Player 1 (Bidak Putih/Emas)
+        amIHost = true;
 
         let initialPayload = {
           amount: selectedAmount,
@@ -394,6 +429,8 @@
     }
 
     function runGameEngineListener(collectionName) {
+      if(unsubscribeMatch) unsubscribeMatch();
+      
       unsubscribeMatch = db.collection(collectionName).doc(currentMatchId).onSnapshot(doc => {
         if(!doc.exists) return;
         const data = doc.data();
@@ -401,7 +438,7 @@
         if (data.status === 'playing') {
           document.getElementById('matchHeaderStatus').textContent = `${chosenGame.toUpperCase()} COMPETITION`;
           const opponent = amIHost ? data.player2 : data.player1;
-          document.getElementById('p2Display').textContent = `ENEMY: ${opponent.name}`;
+          document.getElementById('p2Display').textContent = `ENEMY: ${opponent ? opponent.name : 'Unknown'}`;
 
           myTurn = (data.turn === 'host' && amIHost) || (data.turn === 'guest' && !amIHost);
           if (myTurn) {
@@ -428,13 +465,20 @@
             renderLudoVisual();
           }
         }
+        
+        if (data.status === 'cancelled') {
+          alert("Pencarian dibatalkan.");
+          if(unsubscribeMatch) unsubscribeMatch();
+          inGameScreen.classList.add('hidden');
+          currentMatchId = null;
+        }
+
         if (data.status === 'finished') {
           handleSystemMatchFinished(data.winnerId);
         }
       });
     }
 
-    // 6. REVISED: FULL REALISTIC CHESS ENGINE LOGIC STEP VALIDATION
     function getValidMoves(r, c, piece) {
       let validMoves = [];
       if (!piece) return validMoves;
@@ -456,7 +500,7 @@
       const kingDirections = [[1,0], [-1,0], [0,1], [0,-1], [1,1], [1,-1], [-1,1], [-1,-1]];
 
       switch(piece.toLowerCase()) {
-        case 'p': // PAWN REALISTIC RULE
+        case 'p': 
           const direction = isWhite ? -1 : 1;
           const initialRow = isWhite ? 6 : 1;
           
@@ -470,7 +514,7 @@
           if (getSquareStatus(r + direction, c + 1) === 'enemy') validMoves.push({r: r + direction, c: c + 1});
           break;
 
-        case 'n': // KNIGHT
+        case 'n': 
           for (let step of knightSteps) {
             const nr = r + step[0], nc = c + step[1];
             const status = getSquareStatus(nr, nc);
@@ -478,7 +522,7 @@
           }
           break;
 
-        case 'r': // ROOK
+        case 'r': 
           for (let dir of rookDirections) {
             let step = 1;
             while (true) {
@@ -491,7 +535,7 @@
           }
           break;
 
-        case 'b': // BISHOP
+        case 'b': 
           for (let dir of bishopDirections) {
             let step = 1;
             while (true) {
@@ -504,7 +548,7 @@
           }
           break;
 
-        case 'q': // QUEEN (ROOK + BISHOP)
+        case 'q': 
           for (let dir of [...rookDirections, ...bishopDirections]) {
             let step = 1;
             while (true) {
@@ -517,7 +561,7 @@
           }
           break;
 
-        case 'k': // KING
+        case 'k': 
           for (let dir of kingDirections) {
             const nr = r + dir[0], nc = c + dir[1];
             const status = getSquareStatus(nr, nc);
@@ -528,7 +572,6 @@
       return validMoves;
     }
 
-    // REVISED: GRAPHICAL MATRIX CHESS ENGINE RENDERING (FLIPPED BOARD VIEW & CLEAR PIECE COLORS)
     function renderChessVisual() {
       gameCanvas.innerHTML = "";
       const boardDOM = document.createElement('div');
@@ -538,7 +581,6 @@
 
       for (let vr = 0; vr < 8; vr++) {
         for (let vc = 0; vc < 8; vc++) {
-          // Flip perspectives: Host stays normal, Guest view is inverted
           const r = amIHost ? vr : 7 - vr;
           const c = amIHost ? vc : 7 - vc;
           
@@ -548,13 +590,12 @@
           const piece = boardStateChess[r][c];
           square.textContent = pieceSymbols[piece] || '';
           
-          // STRICT SEPARATE COLOR STYLING FOR PIECES
           if (piece !== '') {
             const isWhite = (piece === piece.toUpperCase());
             if (isWhite) {
-              square.className += ' text-amber-400 font-bold drop-shadow-[0_2px_4px_rgba(255,255,255,0.6)]'; // Host (White/Gold)
+              square.className += ' text-amber-400 font-bold drop-shadow-[0_2px_4px_rgba(255,255,255,0.6)]'; 
             } else {
-              square.className += ' text-slate-950 font-bold drop-shadow-[0_2px_2px_rgba(255,255,255,0.4)]'; // Guest (Solid Black)
+              square.className += ' text-slate-950 font-bold drop-shadow-[0_2px_2px_rgba(255,255,255,0.4)]'; 
             }
           }
           
@@ -587,7 +628,6 @@
               let moveAllowed = moves.some(m => m.r === r && m.c === c);
               
               if (!moveAllowed) {
-                // If clicking another team piece, change selection focus
                 const reTarget = boardStateChess[r][c];
                 if (reTarget !== '' && ((amIHost && reTarget === reTarget.toUpperCase()) || (!amIHost && reTarget !== reTarget.toUpperCase()))) {
                   selectedSquare = {r, c};
@@ -598,7 +638,6 @@
                 return;
               }
 
-              // Update Matrix Engine State
               let destinationPiece = boardStateChess[r][c];
               boardStateChess[r][c] = boardStateChess[fromR][fromC];
               boardStateChess[fromR][fromC] = '';
@@ -626,7 +665,6 @@
       gameCanvas.appendChild(boardDOM);
     }
 
-    // 7. ARTIFACT CORE MODULE: TIC TAC TOE LOGIC
     function renderTTTVisual() {
       gameCanvas.innerHTML = "";
       const boardDOM = document.createElement('div');
@@ -682,7 +720,6 @@
       gameCanvas.appendChild(boardDOM);
     }
 
-    // 8. ARTIFACT CORE MODULE: LUDO LOGIC ENGINE
     const ludoTrackRoute = [
       {r:0, c:2}, {r:0, c:3}, {r:1, c:3}, {r:2, c:4}, 
       {r:3, c:4}, {r:3, c:3}, {r:4, c:2}, {r:4, c:1},
@@ -763,7 +800,6 @@
       await db.collection('ludo_matches').doc(currentMatchId).update(updatePayload);
     });
 
-    // 9. MATCH IN-GAME SETTLEMENT & 10% FEE REVENUE CHARGE WHEN WINNING
     async function handleSystemMatchFinished(winnerId) {
       if(unsubscribeMatch) unsubscribeMatch();
       const myUid = auth.currentUser.uid;
@@ -779,7 +815,7 @@
         turnIndicator.className = "font-comic text-2xl text-green-400";
         
         const totalUangMeja = selectedAmount * 2;
-        const komisiOwner10 = totalUangMeja * 0.10; // Potongan hanya berlaku saat menang game!
+        const komisiOwner10 = totalUangMeja * 0.10; 
         const hadiahBersihPemain = totalUangMeja - komisiOwner10;
         const profitMurniMasukDompet = hadiahBersihPemain - selectedAmount;
 
@@ -799,7 +835,47 @@
       }, 4000);
     }
 
-    // 10. REVISED: WITHDRAW DISPATCHER TO VERCEL BACKEND ENGINE (0% FEE AT WD)
+    document.getElementById('surrenderBtn').addEventListener('click', async () => {
+      if(!currentMatchId) {
+        inGameScreen.classList.add('hidden');
+        return;
+      }
+
+      const collectionName = chosenGame === 'Catur' ? 'chess_matches' : (chosenGame === 'Ludo' ? 'ludo_matches' : 'ttt_matches');
+      
+      try {
+        const matchDoc = await db.collection(collectionName).doc(currentMatchId).get();
+        if (!matchDoc.exists) {
+          inGameScreen.classList.add('hidden');
+          return;
+        }
+
+        const matchData = matchDoc.data();
+
+        if (matchData.status === 'waiting') {
+          if (unsubscribeMatch) unsubscribeMatch();
+          await db.collection(collectionName).doc(currentMatchId).delete();
+          inGameScreen.classList.add('hidden');
+          currentMatchId = null;
+          selectedAmount = 0;
+          alert("Keluar dari antrian pencarian lawan. Saldo aman!");
+          return;
+        }
+
+        if (matchData.status === 'playing') {
+          if(confirm("Beneran Mau Nyerah? Koin Auto Hangus Lho!")) {
+            await db.collection(collectionName).doc(currentMatchId).update({ 
+              status: 'finished', 
+              winnerId: amIHost ? 'guest' : 'host' 
+            });
+          }
+        }
+      } catch (err) {
+        console.error(err);
+        inGameScreen.classList.add('hidden');
+      }
+    });
+
     document.getElementById('executeWdBtn').addEventListener('click', async () => {
       if (!auth.currentUser) return alert("Login dulu!");
       
@@ -852,15 +928,6 @@
       }
     });
 
-    document.getElementById('surrenderBtn').addEventListener('click', async () => {
-      if(!currentMatchId) return inGameScreen.classList.add('hidden');
-      if(confirm("Beneran Mau Nyerah? Koin Auto Hangus Lho!")) {
-        const collectionName = chosenGame === 'Catur' ? 'chess_matches' : (chosenGame === 'Ludo' ? 'ludo_matches' : 'ttt_matches');
-        await db.collection(collectionName).doc(currentMatchId).update({ status: 'finished', winnerId: amIHost ? 'guest' : 'host' });
-      }
-    });
-
-    // 11. INITIALIZER MONITOR REAL-TIME USER DEVICE ACTIVE SESSION
     auth.onAuthStateChanged(user => {
       if(user) {
         document.getElementById('userName').textContent = user.displayName;
