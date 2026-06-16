@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ARENA MULTIGAME PRO V5 - XENDIT READY</title>
+  <title>ARENA MULTIGAME PRO V5.1 - VERCEL XENDIT</title>
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Orbitron:wght@500;800;900&display=swap" rel="stylesheet">
@@ -109,7 +109,7 @@
               <div>
                 <label class="block text-[11px] font-empire text-gray-400 mb-1">JUMLAH KOIN YANG INGIN DI-WD</label>
                 <input type="number" id="wdAmountInput" placeholder="Minimal 10000" class="w-full bg-gray-900 border border-gray-800 px-4 py-3 rounded-xl text-sm font-comic text-amber-400 focus:outline-none focus:border-green-500">
-                <p class="text-[10px] text-gray-500 mt-1">* 10% dari jumlah ini akan otomatis masuk kas sebagai komisi platform owner.</p>
+                <p class="text-[10px] text-gray-500 mt-1">* 10% dari jumlah ini akan otomatis dipotong sebagai komisi platform owner.</p>
               </div>
 
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -126,13 +126,13 @@
                 </div>
                 <div>
                   <label class="block text-[11px] font-empire text-gray-400 mb-1">NOMOR REKENING / NO HP</label>
-                  <input type="text" id="wdAccountNumber" placeholder="Contoh: 82910392XX / 081234XX" class="w-full bg-gray-900 border border-gray-800 px-4 py-3 rounded-xl text-sm font-empire focus:outline-none text-white">
+                  <input type="text" id="wdAccountNumber" placeholder="Contoh: 82910392XX" class="w-full bg-gray-900 border border-gray-800 px-4 py-3 rounded-xl text-sm font-empire focus:outline-none text-white">
                 </div>
               </div>
 
               <div>
                 <label class="block text-[11px] font-empire text-gray-400 mb-1">NAMA PEMILIK REKENING</label>
-                <input type="text" id="wdAccountName" placeholder="Harus sama dengan nama di Buku Tabungan/App" class="w-full bg-gray-900 border border-gray-800 px-4 py-3 rounded-xl text-sm font-empire focus:outline-none text-white">
+                <input type="text" id="wdAccountName" placeholder="Harus sesuai rekening bank" class="w-full bg-gray-900 border border-gray-800 px-4 py-3 rounded-xl text-sm font-empire focus:outline-none text-white">
               </div>
             </div>
 
@@ -148,7 +148,6 @@
     <div class="bg-[#111827] border border-gray-800 w-full max-w-md p-6 rounded-2xl space-y-4 relative">
       <button id="closeBetModal" class="absolute top-4 right-4 text-gray-400 text-xl"><i class="fas fa-times"></i></button>
       <h2 id="modalGameTitle" class="text-2xl font-black text-amber-400 font-comic uppercase">TARUHAN GAME</h2>
-      <p class="text-xs text-gray-400 font-empire">PILIH NOMINAL TARUHAN KOIN UNTUK MENCARI ROOM MATCH:</p>
       <div class="grid grid-cols-2 gap-2">
         <button class="bet-select-btn bg-gray-800 p-3 rounded-xl font-comic text-xl text-amber-400" data-amount="1000">🪙 1.000</button>
         <button class="bet-select-btn bg-gray-800 p-3 rounded-xl font-comic text-xl text-amber-400" data-amount="5000">🪙 5.000</button>
@@ -187,7 +186,6 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
   <script>
-    // Konfigurasi Database Firebase Pro Lu
     const firebaseConfig = {
       apiKey: "AIzaSyAvGeziF9PkZpWMGAv9RF8ZpWK_0eYUHRI",
       authDomain: "battle-arena-bd9e4.firebaseapp.com",
@@ -200,8 +198,8 @@
     const db = firebase.firestore();
     const auth = firebase.auth();
 
-    // BACKEND CONFIG: Ganti URL ini dengan URL ngrok atau server backend VPS lu nanti!
-    const BACKEND_API_URL = "http://localhost:3000";
+    // Menggunakan relative path Vercel Serverless Function
+    const BACKEND_API_URL = "/api/withdraw";
 
     let chosenGame = "";
     let selectedAmount = 0;
@@ -212,7 +210,6 @@
     let unsubscribeMatch = null;
     let unsubscribeUser = null;
 
-    // STATE MEMORY GAME ENGINE
     let selectedSquare = null; 
     let boardStateChess = [];
     let boardStateTTT = [];
@@ -222,7 +219,6 @@
       'R':'♜','N':'♞','B':'♝','Q':'♛','K':'♚','P':'♟','r':'♖','n':'♞','b':'♗','q':'♕','k':'♔','p':'♙','':''
     };
 
-    // DOM ELEMENTS
     const gameCards = document.querySelectorAll('.game-card');
     const betModal = document.getElementById('betModal');
     const modalGameTitle = document.getElementById('modalGameTitle');
@@ -236,7 +232,6 @@
     const rollDiceBtn = document.getElementById('rollDiceBtn');
     const diceResult = document.getElementById('diceResult');
 
-    // TAB MANAGEMENT KASIR
     const tabDepoBtn = document.getElementById('tabDepoBtn');
     const tabWdBtn = document.getElementById('tabWdBtn');
     const panelDeposit = document.getElementById('panelDeposit');
@@ -256,7 +251,6 @@
       panelDeposit.classList.add('hidden');
     });
 
-    // AKTIVASI KLIK KATALOG GAME
     gameCards.forEach(card => {
       card.addEventListener('click', () => {
         if (!auth.currentUser) return alert("Masuk Arena Dulu Bos!");
@@ -283,7 +277,6 @@
       executeServerMatchmaking();
     });
 
-    // UNIFIED ENGINE MATCHMAKING MULTIGAME
     async function executeServerMatchmaking() {
       const user = auth.currentUser;
       document.getElementById('p1Display').textContent = `YOU: ${user.displayName}`;
@@ -386,9 +379,6 @@
       });
     }
 
-    // ==========================================
-    // 1. CHESS ENGINE VISUAL
-    // ==========================================
     function renderChessVisual() {
       gameCanvas.innerHTML = "";
       const boardDOM = document.createElement('div');
@@ -431,9 +421,6 @@
       gameCanvas.appendChild(boardDOM);
     }
 
-    // ==========================================
-    // 2. TIC-TAC-TOE BEST OF 3
-    // ==========================================
     function renderTTTVisual() {
       gameCanvas.innerHTML = "";
       const boardDOM = document.createElement('div');
@@ -489,9 +476,6 @@
       gameCanvas.appendChild(boardDOM);
     }
 
-    // ==========================================
-    // 3. LUDO MINI ENGINE
-    // ==========================================
     function renderLudoVisual() {
       gameCanvas.innerHTML = "";
       const ludoDOM = document.createElement('div');
@@ -555,9 +539,6 @@
       await db.collection(collectionName).doc(currentMatchId).update(updatePayload);
     });
 
-    // ==========================================
-    // SYSTEM SETTLEMENT AMBIL HADIAH (POTONG 10% DI AMBIL)
-    // ==========================================
     async function handleSystemMatchFinished(winnerId) {
       if(unsubscribeMatch) unsubscribeMatch();
       const myUid = auth.currentUser.uid;
@@ -572,12 +553,9 @@
         turnIndicator.textContent = "🏆 LU MENANG! HADIAH DIKIRIM!";
         turnIndicator.className = "font-comic text-2xl text-green-400 animate-bounce";
         
-        // Player 1 Taruhan + Player 2 Taruhan = Total Koin Meja Judi
         const totalUangMeja = selectedAmount * 2;
         const komisiOwner10 = totalUangMeja * 0.10; // Potongan Admin 10%
         const hadiahBersihPemain = totalUangMeja - komisiOwner10;
-
-        // Ditambahkan ke database pemain pemenang
         const profitMurniMasukDompet = hadiahBersihPemain - selectedAmount;
 
         await db.collection('users').doc(myUid).update({ 
@@ -596,9 +574,7 @@
       }, 4000);
     }
 
-    // ==========================================
-    // LOGIKA PENGAJUAN WITHDRAW (WD) KE BACKEND XENDIT
-    // ==========================================
+    // DISPATCH PENGAJUAN WD KE VERCEL SERVERLESS METHOD
     document.getElementById('executeWdBtn').addEventListener('click', async () => {
       if (!auth.currentUser) return alert("Login dulu!");
       
@@ -616,13 +592,13 @@
       const myUid = auth.currentUser.uid;
 
       try {
-        // Langkah 1: Potong koin di Firebase saat itu juga (Mencegah Double WD)
+        // Potong koin instan agar menghindari exploit spam klik / double WD
         await db.collection('users').doc(myUid).update({
           coins: firebase.firestore.FieldValue.increment(-amountToWd)
         });
 
-        // Langkah 2: Kirim instruksi transaksi aman ke Backend API Xendit Lu
-        const response = await fetch(`${BACKEND_API_URL}/api/withdraw`, {
+        // Tembak serverless function Vercel
+        const response = await fetch(BACKEND_API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -638,20 +614,19 @@
 
         if (result.success) {
           alert(`WD Berhasil Diajukan! Xendit sedang mentransfer Rp ${result.payoutAmount.toLocaleString()} ke rekening lu.`);
-          // Reset Form inputan
           document.getElementById('wdAmountInput').value = "";
           document.getElementById('wdAccountNumber').value = "";
           document.getElementById('wdAccountName').value = "";
         } else {
-          // Jika backend gagal kirim duit, kembalikan koin player
           alert("Gagal memproses WD: " + result.message);
+          // Rollback koin jika API Xendit menolak transaksi
           await db.collection('users').doc(myUid).update({
             coins: firebase.firestore.FieldValue.increment(amountToWd)
           });
         }
       } catch (error) {
         console.error(error);
-        alert("Koneksi ke backend bermasalah!");
+        alert("Terjadi kendala koneksi sistem serverless Vercel.");
       }
     });
 
@@ -672,7 +647,6 @@
       document.getElementById('depoSection').classList.remove('hidden');
     });
 
-    // SIMULASI DEPOSIT SCRIPT
     const depoOptions = document.querySelectorAll('.depo-option');
     let activeDepoVal = 0;
     depoOptions.forEach(opt => {
@@ -689,7 +663,6 @@
       alert("Sukses Top Up!");
     });
 
-    // AUTH OBSERVER MONITOR
     auth.onAuthStateChanged(user => {
       if(user) {
         document.getElementById('userName').textContent = user.displayName;
