@@ -1,6 +1,6 @@
 {
   "name": "arena-pro-backend",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Backend engine platform multi-game server real-time layout",
   "main": "api/withdraw.js",
   "dependencies": {
