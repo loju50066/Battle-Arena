@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ARENA PRO</title>
+  <title>ARENA MULTIGAME PRO V5 - XENDIT READY</title>
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Orbitron:wght@500;800;900&display=swap" rel="stylesheet">
@@ -12,131 +12,131 @@
     .font-empire { font-family: 'Orbitron', sans-serif; }
     .font-comic { font-family: 'Bangers', cursive; tracking-wide: 0.05em; }
     #sidebar { transition: transform 0.3s ease-in-out; }
-    .pulse-animation { animation: pulse 1.5s infinite; }
-    @keyframes pulse {
-      0% { opacity: 0.7; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.02); }
-      100% { opacity: 0.7; transform: scale(1); }
-    }
+    
+    /* CHESS STYLE */
+    .chess-board { display: grid; grid-template-columns: repeat(8, 1fr); width: 100%; max-width: 340px; aspect-ratio: 1; border: 4px solid #1e293b; }
+    .chess-square { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; cursor: pointer; user-select: none; }
+    .square-light { background: #e2e8f0; color: #1e293b; }
+    .square-dark { background: #475569; color: #f8fafc; }
+    .square-selected { background: #eab308 !important; }
+
+    /* TIC TAC TOE STYLE */
+    .ttt-board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; width: 100%; max-width: 280px; aspect-ratio: 1; }
+    .ttt-square { background: #1e293b; border: 2px solid #334155; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 3rem; font-weight: 900; cursor: pointer; border-radius: 12px; }
+
+    /* LUDO MINI BOARD STYLE */
+    .ludo-board { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; width: 100%; max-width: 300px; aspect-ratio: 1; background: #1e293b; p: 4px; border-radius: 12px; }
+    .ludo-cell { aspect-ratio: 1; border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; position: relative; }
   </style>
 </head>
 <body class="bg-[#0b0f19] text-gray-200 font-sans select-none">
 
   <header class="bg-[#111827] border-b border-gray-800 px-4 py-3 flex justify-between items-center sticky top-0 z-50">
     <div class="flex items-center gap-3">
-      <button id="menuBtn" class="text-gray-400 hover:text-white text-xl focus:outline-none p-1">
-        <i class="fas fa-bars"></i>
-      </button>
+      <button id="menuBtn" class="text-gray-400 hover:text-white text-xl p-1"><i class="fas fa-bars"></i></button>
       <div class="flex items-center gap-2">
-        <div class="w-8 h-8 bg-gradient-to-br from-amber-400 to-orange-600 rounded-lg flex items-center justify-center font-black text-gray-950 font-empire text-lg shadow-md shadow-orange-600/20">A</div>
+        <div class="w-8 h-8 bg-gradient-to-br from-amber-400 to-orange-600 rounded-lg flex items-center justify-center font-black text-gray-950 font-empire text-lg">A</div>
         <span class="text-2xl font-black tracking-wider bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent font-empire">ARENA PRO</span>
       </div>
     </div>
-    
-    <button id="loginBtn" class="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-gray-950 font-black px-5 py-2 rounded-xl transition text-sm flex items-center gap-2 font-empire shadow-lg shadow-orange-500/20 cursor-pointer">
-      <i class="fab fa-google"></i> MASUK ARENA
-    </button>
+    <button id="loginBtn" class="bg-gradient-to-r from-amber-500 to-orange-500 text-gray-950 font-black px-5 py-2 rounded-xl text-sm flex items-center gap-2 font-empire shadow-lg cursor-pointer"><i class="fab fa-google"></i> MASUK ARENA</button>
   </header>
 
   <div class="flex">
     <aside id="sidebar" class="fixed inset-y-0 left-0 transform -translate-x-full z-40 w-64 bg-[#111827] border-r border-gray-800 p-4 pt-16 flex flex-col justify-between md:relative md:translate-x-0 md:pt-6 h-[calc(100vh-61px)]">
-      <div>
-        <div class="flex justify-between items-center mb-6 md:hidden">
-          <span class="text-xs font-black text-gray-500 uppercase tracking-widest font-empire">Navigasi</span>
-          <button id="closeSidebarBtn" class="text-gray-400 hover:text-white p-1">
-            <i class="fas fa-times text-xl"></i>
-          </button>
-        </div>
-
-        <p class="text-xs font-black text-gray-500 uppercase tracking-widest mb-4 hidden md:block font-empire">Menu Navigasi</p>
-        <nav class="space-y-2">
-          <button id="toggleArenaBtn" class="w-full flex items-center gap-3 px-4 py-3 bg-amber-500/10 border border-amber-500/30 text-white rounded-xl font-medium transition cursor-pointer text-left">
-            <span class="p-2 bg-amber-500/20 text-amber-500 rounded-lg text-sm">⚔️</span>
-            <span class="font-empire text-sm tracking-wide">ARENA MATCH</span>
-          </button>
-          <button id="toggleDepoBtn" class="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-800/40 text-gray-400 hover:text-white rounded-xl font-medium transition cursor-pointer text-left">
-            <span class="p-2 bg-gray-800 text-gray-400 rounded-lg text-sm">💳</span>
-            <span class="font-empire text-sm tracking-wide">HISTORY & DEPO</span>
-          </button>
-        </nav>
-      </div>
-      
+      <nav class="space-y-2">
+        <button id="toggleArenaBtn" class="w-full flex items-center gap-3 px-4 py-3 bg-amber-500/10 border border-amber-500/30 text-white rounded-xl text-left"><span>⚔️</span><span class="font-empire text-sm">KATALOG GAME</span></button>
+        <button id="toggleDepoBtn" class="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-800/40 text-gray-400 rounded-xl text-left"><span>💳</span><span class="font-empire text-sm">KASIR HUB (DEPO/WD)</span></button>
+      </nav>
       <div id="userProfile" class="hidden border-t border-gray-800 pt-4 flex items-center gap-3">
-        <img id="userAvatar" src="" alt="Avatar" class="w-10 h-10 rounded-full border-2 border-amber-500 shadow-md shadow-amber-500/10">
+        <img id="userAvatar" src="" class="w-10 h-10 rounded-full border-2 border-amber-500">
         <div class="overflow-hidden">
           <p id="userName" class="text-sm font-bold text-white truncate font-empire"></p>
-          <p id="userCoins" class="text-sm text-amber-400 font-black font-comic tracking-wide">🪙 0 KOIN</p>
+          <p id="userCoins" class="text-sm text-amber-400 font-black font-comic">🪙 0 KOIN</p>
         </div>
       </div>
     </aside>
 
-    <div id="overlay" class="fixed inset-0 bg-black/60 z-30 hidden md:hidden"></div>
+    <div id="overlay" class="fixed inset-0 bg-black/60 z-30 hidden"></div>
 
     <main class="flex-1 p-4 md:p-6 min-h-[calc(100vh-61px)]">
       <div class="max-w-4xl mx-auto space-y-6">
         
         <div id="arenaSection" class="space-y-6">
-          <div class="bg-gradient-to-br from-gray-900 via-[#111827] to-slate-900 p-6 rounded-2xl border border-gray-800 shadow-2xl relative overflow-hidden">
-            <h1 class="text-3xl font-black text-white mb-2 font-comic tracking-wider text-amber-400">ROOM TARUHAN ARENA PRO</h1>
-            <p class="text-gray-400 text-xs font-empire tracking-wide">PILIH NOMINAL TARUHAN, CARI LAWAN TANDING, DAN DOMINASI ARENA ENEMY REAL-TIME!</p>
+          <div class="bg-gradient-to-br from-gray-900 via-[#111827] to-slate-900 p-6 rounded-2xl border border-gray-800">
+            <h1 class="text-3xl font-black text-amber-400 font-comic tracking-wider">PILIH ARENA GAMEPLAY</h1>
+            <p class="text-gray-400 text-xs font-empire uppercase">Pilih Game, tentukan nominal taruhan bet, lalu bantai lawanmu!</p>
           </div>
 
-          <div class="bg-[#111827] border border-gray-800 p-5 rounded-2xl shadow-xl space-y-4">
-            <h2 class="text-sm font-black text-gray-400 font-empire tracking-widest uppercase">1. Pilih Nominal Taruhan (Koin):</h2>
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              <button class="bet-option bg-gray-800/80 hover:bg-gray-700/80 text-white font-black py-4 px-4 rounded-xl border-2 border-transparent transition text-center flex flex-col items-center justify-center gap-1 cursor-pointer shadow-md" data-amount="1000">
-                <span class="text-xs text-gray-500 font-empire uppercase">BET</span><span class="text-2xl text-amber-400 font-comic">🪙 1.000</span>
-              </button>
-              <button class="bet-option bg-gray-800/80 hover:bg-gray-700/80 text-white font-black py-4 px-4 rounded-xl border-2 border-transparent transition text-center flex flex-col items-center justify-center gap-1 cursor-pointer shadow-md" data-amount="2000">
-                <span class="text-xs text-gray-500 font-empire uppercase">BET</span><span class="text-2xl text-amber-400 font-comic">🪙 2.000</span>
-              </button>
-              <button class="bet-option bg-gray-800/80 hover:bg-gray-700/80 text-white font-black py-4 px-4 rounded-xl border-2 border-transparent transition text-center flex flex-col items-center justify-center gap-1 cursor-pointer shadow-md" data-amount="5000">
-                <span class="text-xs text-gray-500 font-empire uppercase">BET</span><span class="text-2xl text-amber-400 font-comic">🪙 5.000</span>
-              </button>
-              <button class="bet-option bg-gray-800/80 hover:bg-gray-700/80 text-white font-black py-4 px-4 rounded-xl border-2 border-transparent transition text-center flex flex-col items-center justify-center gap-1 cursor-pointer shadow-md" data-amount="10000">
-                <span class="text-xs text-gray-500 font-empire uppercase">BET</span><span class="text-2xl text-amber-400 font-comic">🪙 10.000</span>
-              </button>
-              <button class="bet-option bg-gray-800/80 hover:bg-gray-700/80 text-white font-black py-4 px-4 rounded-xl border-2 border-transparent transition text-center flex flex-col items-center justify-center gap-1 cursor-pointer shadow-md" data-amount="50000">
-                <span class="text-xs text-gray-500 font-empire uppercase">BET</span><span class="text-2xl text-amber-400 font-comic">🪙 50.000</span>
-              </button>
-              <button class="bet-option bg-gray-800/80 hover:bg-gray-700/80 text-white font-black py-4 px-4 rounded-xl border-2 border-transparent transition text-center flex flex-col items-center justify-center gap-1 cursor-pointer shadow-md" data-amount="100000">
-                <span class="text-xs text-gray-500 font-empire uppercase">BET</span><span class="text-2xl text-amber-400 font-comic">🪙 100.000</span>
-              </button>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="game-card bg-[#111827] border border-gray-800 p-4 rounded-2xl hover:border-amber-500 transition cursor-pointer group" data-game="Catur">
+              <div class="h-28 bg-slate-800 rounded-xl flex items-center justify-center text-5xl mb-3 group-hover:scale-105 transition">👑</div>
+              <h3 class="text-lg font-black text-white font-empire">CATUR ARENA</h3>
+              <p class="text-[11px] text-gray-400 mt-1">Uji strategi murni 1v1 turn-based. Bebas auto-clicker.</p>
             </div>
-          </div>
-
-          <div class="bg-[#111827] border border-gray-800 p-6 rounded-2xl text-center space-y-4 shadow-xl">
-            <div id="statusText" class="text-gray-400 text-xs font-empire tracking-wider uppercase">Silakan pilih nominal taruhan di atas untuk mengaktifkan sistem tanding.</div>
-            <button id="playBtn" disabled class="w-full sm:w-72 mx-auto bg-gray-700 text-gray-500 font-black py-4 rounded-xl text-xl tracking-wider transition uppercase shadow-lg font-comic cursor-not-allowed flex items-center justify-center gap-2 border-b-4 border-gray-900 active:border-b-0 transform active:translate-y-1">
-              <i class="fas fa-gamepad"></i> MAIN SEKARANG
-            </button>
+            <div class="game-card bg-[#111827] border border-gray-800 p-4 rounded-2xl hover:border-red-500 transition cursor-pointer group" data-game="Ludo">
+              <div class="h-28 bg-slate-800 rounded-xl flex items-center justify-center text-5xl mb-3 group-hover:scale-105 transition">🎲</div>
+              <h3 class="text-lg font-black text-white font-empire">LUDO ARENA</h3>
+              <p class="text-[11px] text-gray-400 mt-1">Balapan dadu turn-based. Siapa sampai tengah duluan sapu koin!</p>
+            </div>
+            <div class="game-card bg-[#111827] border border-gray-800 p-4 rounded-2xl hover:border-green-500 transition cursor-pointer group" data-game="TicTacToe">
+              <div class="h-28 bg-slate-800 rounded-xl flex items-center justify-center text-5xl mb-3 group-hover:scale-105 transition">❌</div>
+              <h3 class="text-lg font-black text-white font-empire">XOXO BEST OF 3</h3>
+              <p class="text-[11px] text-green-400 font-bold mt-1">SISTEM COCOK TARUHAN: HARUS 2x MENANG BABAK!</p>
+            </div>
           </div>
         </div>
 
         <div id="depoSection" class="hidden space-y-6">
-          <div class="bg-gradient-to-br from-gray-900 via-[#111827] to-slate-900 p-6 rounded-2xl border border-gray-800 shadow-2xl">
-            <h1 class="text-3xl font-black text-white mb-2 font-comic tracking-wider text-orange-500">KASIR & ISI ULANG KOIN</h1>
-            <p class="text-gray-400 text-xs font-empire tracking-wide">TAMBAH SALDO KOIN UNTUK SIAP BERTARUNG DI ARENA HIGH-ROLLER!</p>
+          <div class="flex border-b border-gray-800 gap-2">
+            <button id="tabDepoBtn" class="px-6 py-2 border-b-2 border-amber-500 font-empire text-sm text-white font-bold">DEPOSIT</button>
+            <button id="tabWdBtn" class="px-6 py-2 border-b-2 border-transparent font-empire text-sm text-gray-400 hover:text-white">WITHDRAW (WD)</button>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-[#111827] border border-gray-800 p-5 rounded-2xl shadow-xl space-y-4">
-              <h2 class="text-sm font-black text-gray-400 font-empire tracking-widest uppercase">Isi Ulang Cepat (Instan):</h2>
-              <div class="grid grid-cols-2 gap-2">
-                <button class="depo-option bg-gray-800 hover:bg-orange-600/20 hover:border-orange-500 border border-transparent p-3 rounded-xl text-center font-comic text-xl text-amber-400 cursor-pointer transition" data-value="10000">+ 10.000</button>
-                <button class="depo-option bg-gray-800 hover:bg-orange-600/20 hover:border-orange-500 border border-transparent p-3 rounded-xl text-center font-comic text-xl text-amber-400 cursor-pointer transition" data-value="50000">+ 50.000</button>
-                <button class="depo-option bg-gray-800 hover:bg-orange-600/20 hover:border-orange-500 border border-transparent p-3 rounded-xl text-center font-comic text-xl text-amber-400 cursor-pointer transition" data-value="100000">+ 100.000</button>
-                <button class="depo-option bg-gray-800 hover:bg-orange-600/20 hover:border-orange-500 border border-transparent p-3 rounded-xl text-center font-comic text-xl text-amber-400 cursor-pointer transition" data-value="500000">+ 500.000</button>
+          <div id="panelDeposit" class="bg-[#111827] border border-gray-800 p-5 rounded-2xl space-y-4">
+            <h2 class="font-empire text-xs text-orange-500 font-bold uppercase">Simulasi Isi Ulang Koin (1 Koin = Rp 1)</h2>
+            <div class="grid grid-cols-2 gap-2">
+              <button class="depo-option bg-gray-800 p-3 rounded-xl font-comic text-xl text-amber-400 cursor-pointer" data-value="10000">+ 10.000</button>
+              <button class="depo-option bg-gray-800 p-3 rounded-xl font-comic text-xl text-amber-400 cursor-pointer" data-value="50000">+ 50.000</button>
+            </div>
+            <button id="executeDepoBtn" class="w-full bg-orange-500 text-gray-950 font-black py-3 rounded-xl font-empire tracking-widest">PROSES ISI ULANG</button>
+          </div>
+
+          <div id="panelWithdraw" class="hidden bg-[#111827] border border-gray-800 p-5 rounded-2xl space-y-4">
+            <h2 class="font-empire text-xs text-green-400 font-bold uppercase">Formulir Penarikan Uang (Potongan Komisi 10%)</h2>
+            
+            <div class="space-y-3">
+              <div>
+                <label class="block text-[11px] font-empire text-gray-400 mb-1">JUMLAH KOIN YANG INGIN DI-WD</label>
+                <input type="number" id="wdAmountInput" placeholder="Minimal 10000" class="w-full bg-gray-900 border border-gray-800 px-4 py-3 rounded-xl text-sm font-comic text-amber-400 focus:outline-none focus:border-green-500">
+                <p class="text-[10px] text-gray-500 mt-1">* 10% dari jumlah ini akan otomatis masuk kas sebagai komisi platform owner.</p>
               </div>
-              <button id="executeDepoBtn" class="w-full bg-orange-500 hover:bg-orange-600 text-gray-950 font-black font-empire py-3 rounded-xl text-sm transition tracking-widest shadow-lg cursor-pointer">PROSES ISI ULANG</button>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-[11px] font-empire text-gray-400 mb-1">PILIH BANK / E-WALLET</label>
+                  <select id="wdBankCode" class="w-full bg-gray-900 border border-gray-800 px-4 py-3 rounded-xl text-sm font-empire focus:outline-none text-white">
+                    <option value="BCA">BCA (Bank Central Asia)</option>
+                    <option value="BNI">BNI (Bank Negara Indonesia)</option>
+                    <option value="BRI">BRI (Bank Rakyat Indonesia)</option>
+                    <option value="MANDIRI">MANDIRI (Bank Mandiri)</option>
+                    <option value="DANA">DANA (E-Wallet)</option>
+                    <option value="OVO">OVO (E-Wallet)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-[11px] font-empire text-gray-400 mb-1">NOMOR REKENING / NO HP</label>
+                  <input type="text" id="wdAccountNumber" placeholder="Contoh: 82910392XX / 081234XX" class="w-full bg-gray-900 border border-gray-800 px-4 py-3 rounded-xl text-sm font-empire focus:outline-none text-white">
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-[11px] font-empire text-gray-400 mb-1">NAMA PEMILIK REKENING</label>
+                <input type="text" id="wdAccountName" placeholder="Harus sama dengan nama di Buku Tabungan/App" class="w-full bg-gray-900 border border-gray-800 px-4 py-3 rounded-xl text-sm font-empire focus:outline-none text-white">
+              </div>
             </div>
 
-            <div class="bg-[#111827] border border-gray-800 p-5 rounded-2xl shadow-xl space-y-4 flex flex-col">
-              <h2 class="text-sm font-black text-gray-400 font-empire tracking-widest uppercase">Riwayat Transaksi Terakhir:</h2>
-              <div id="historyList" class="flex-1 space-y-2 max-h-[220px] overflow-y-auto pr-1 text-xs font-empire text-gray-400">
-                <div class="p-3 bg-gray-800/40 rounded-xl border border-gray-800 text-center text-gray-500">Belum ada riwayat transaksi masuk.</div>
-              </div>
-            </div>
+            <button id="executeWdBtn" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-gray-950 font-black py-4 rounded-xl font-empire tracking-widest uppercase shadow-lg">KIRIM PENARIKAN (WD) VIA XENDIT</button>
           </div>
         </div>
 
@@ -144,36 +144,41 @@
     </main>
   </div>
 
-  <div id="inGameScreen" class="fixed inset-0 bg-[#070a12] z-50 hidden flex flex-col justify-between p-4 md:p-6">
-    <div class="flex justify-between items-center bg-[#111827] border border-gray-800 p-3 rounded-xl shadow-lg">
-      <div class="flex items-center gap-2">
-        <span class="w-3 h-3 rounded-full bg-red-500 pulse-animation"></span>
-        <span id="matchHeaderStatus" class="font-empire text-xs font-black tracking-widest text-gray-400">MENCARI LAWAN...</span>
+  <div id="betModal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-[#111827] border border-gray-800 w-full max-w-md p-6 rounded-2xl space-y-4 relative">
+      <button id="closeBetModal" class="absolute top-4 right-4 text-gray-400 text-xl"><i class="fas fa-times"></i></button>
+      <h2 id="modalGameTitle" class="text-2xl font-black text-amber-400 font-comic uppercase">TARUHAN GAME</h2>
+      <p class="text-xs text-gray-400 font-empire">PILIH NOMINAL TARUHAN KOIN UNTUK MENCARI ROOM MATCH:</p>
+      <div class="grid grid-cols-2 gap-2">
+        <button class="bet-select-btn bg-gray-800 p-3 rounded-xl font-comic text-xl text-amber-400" data-amount="1000">🪙 1.000</button>
+        <button class="bet-select-btn bg-gray-800 p-3 rounded-xl font-comic text-xl text-amber-400" data-amount="5000">🪙 5.000</button>
+        <button class="bet-select-btn bg-gray-800 p-3 rounded-xl font-comic text-xl text-amber-400" data-amount="10000">🪙 10.000</button>
+        <button class="bet-select-btn bg-gray-800 p-3 rounded-xl font-comic text-xl text-amber-400" data-amount="50000">🪙 50.000</button>
       </div>
+      <button id="startMatchmakingBtn" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-gray-950 font-black font-empire py-4 rounded-xl tracking-widest uppercase">MULAI CARI LAWAN TANDING</button>
+    </div>
+  </div>
+
+  <div id="inGameScreen" class="fixed inset-0 bg-[#070a12] z-50 hidden flex flex-col justify-between p-4">
+    <div class="flex justify-between items-center bg-[#111827] border border-gray-800 p-3 rounded-xl">
+      <div><span id="matchHeaderStatus" class="font-empire text-xs text-red-400 tracking-wider">MENCARI LAWAN...</span></div>
       <div id="gameBetStatus" class="font-comic text-xl text-amber-400">BET: 🪙 0</div>
-      <button id="surrenderBtn" class="bg-red-600 hover:bg-red-700 text-white font-black px-4 py-2 rounded-lg text-xs font-empire tracking-wider transition cursor-pointer">SURRENDER</button>
+      <button id="surrenderBtn" class="bg-red-600 text-white font-black px-3 py-1.5 rounded-lg text-xs font-empire">SURRENDER</button>
     </div>
 
-    <div class="flex-1 my-4 bg-gradient-to-b from-[#111827] to-[#0e1420] border-2 border-orange-500/30 rounded-2xl flex flex-col items-center justify-center relative shadow-inner overflow-hidden">
-      <div class="text-center space-y-6 z-10 p-4">
-        <div class="flex items-center justify-center gap-8 md:gap-16">
-          <div class="text-center space-y-2">
-            <img id="p1Avatar" src="" class="w-16 h-16 md:w-20 md:h-20 rounded-full border-4 border-amber-500 mx-auto" alt="Me">
-            <p id="p1Name" class="text-sm font-black font-empire text-white max-w-[100px] truncate"></p>
-            <span class="text-xs font-bold px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30 font-empire">YOU</span>
-          </div>
-          <div class="font-comic text-4xl md:text-6xl text-orange-500 italic font-black transform -rotate-12 animate-bounce">VS</div>
-          <div class="text-center space-y-2 opacity-0 transition-opacity duration-500" id="opponentBox">
-            <img id="p2Avatar" src="" class="w-16 h-16 md:w-20 md:h-20 rounded-full border-4 border-red-500 mx-auto" alt="Enemy">
-            <p id="p2Name" class="text-sm font-black font-empire text-white max-w-[100px] truncate">Mencari...</p>
-            <span class="text-xs font-bold px-2 py-0.5 bg-red-500/20 text-red-400 rounded border border-red-500/30 font-empire">ENEMY</span>
-          </div>
-        </div>
-        <div id="gameStatusAlert" class="font-comic text-2xl md:text-4xl text-white tracking-wide uppercase mt-4">Menghubungkan ke Server Arena...</div>
+    <div class="flex-1 my-4 bg-[#111827] border border-gray-800 rounded-2xl flex flex-col items-center justify-center p-4 gap-4">
+      <div id="scoreBoardZone" class="hidden text-sm font-empire bg-gray-900 px-4 py-1.5 rounded-full border border-gray-800 text-orange-400 font-bold"></div>
+      <div id="p2Display" class="text-xs font-empire text-red-400">Menunggu Pemain Lawan...</div>
+
+      <div id="gameCanvas" class="w-full flex items-center justify-center"></div>
+
+      <div id="ludoController" class="hidden w-full max-w-xs bg-gray-900 border border-gray-800 p-3 rounded-xl text-center space-y-2">
+        <div id="diceResult" class="text-3xl">🎲</div>
+        <button id="rollDiceBtn" disabled class="w-full bg-red-600 disabled:bg-gray-800 text-white py-2 rounded-xl font-comic tracking-widest text-lg">KOCOK DADU</button>
       </div>
-    </div>
-    <div class="bg-[#111827] border border-gray-800 p-3 rounded-xl flex justify-between items-center text-xs font-empire text-gray-500 tracking-wider">
-      <span>PING: 18ms</span><span>ARENA PVP ENGINE V2.0</span>
+
+      <div id="turnIndicator" class="font-comic text-lg text-yellow-400 uppercase">SERVER SYNCHRONIZING...</div>
+      <div id="p1Display" class="text-xs font-empire text-blue-400 font-bold"></div>
     </div>
   </div>
 
@@ -182,324 +187,524 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
   <script>
+    // Konfigurasi Database Firebase Pro Lu
     const firebaseConfig = {
-      apiKey: "AIzaSyAvGeziF9PkZpWMGAv9RF8ZpWK_0eYUHRI", 
-      authDomain: "battle-arena-bd9e4.firebaseapp.com", 
-      projectId: "battle-arena-bd9e4", 
-      storageBucket: "battle-arena-bd9e4.firebasestorage.app", 
-      messagingSenderId: "543773004112", 
-      appId: "1:543773004112:web:9ebaa2007211a363e4dc55", 
-      measurementId: "G-FVKSFX7B8W" 
+      apiKey: "AIzaSyAvGeziF9PkZpWMGAv9RF8ZpWK_0eYUHRI",
+      authDomain: "battle-arena-bd9e4.firebaseapp.com",
+      projectId: "battle-arena-bd9e4",
+      storageBucket: "battle-arena-bd9e4.firebasestorage.app",
+      messagingSenderId: "543773004112",
+      appId: "1:543773004112:web:9ebaa2007211a363e4dc55"
     };
-
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
     const db = firebase.firestore();
+    const auth = firebase.auth();
 
+    // BACKEND CONFIG: Ganti URL ini dengan URL ngrok atau server backend VPS lu nanti!
+    const BACKEND_API_URL = "http://localhost:3000";
+
+    let chosenGame = "";
     let selectedAmount = 0;
-    let currentDepoValue = 0;
-    let isSearching = false;
+    let userCurrentCoins = 0;
     let currentMatchId = null;
+    let amIHost = true;
+    let myTurn = false;
     let unsubscribeMatch = null;
     let unsubscribeUser = null;
 
+    // STATE MEMORY GAME ENGINE
+    let selectedSquare = null; 
+    let boardStateChess = [];
+    let boardStateTTT = [];
+    let ludoPositions = { host: 0, guest: 0 };
+
+    const pieceSymbols = {
+      'R':'♜','N':'♞','B':'♝','Q':'♛','K':'♚','P':'♟','r':'♖','n':'♞','b':'♗','q':'♕','k':'♔','p':'♙','':''
+    };
+
     // DOM ELEMENTS
-    const menuBtn = document.getElementById('menuBtn');
-    const closeSidebarBtn = document.getElementById('closeSidebarBtn');
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('overlay');
-    const loginBtn = document.getElementById('loginBtn');
-    const userProfile = document.getElementById('userProfile');
-    const userAvatar = document.getElementById('userAvatar');
-    const userName = document.getElementById('userName');
-    const userCoins = document.getElementById('userCoins');
-
-    // TAB SECTIONS ELEMENTS
-    const toggleArenaBtn = document.getElementById('toggleArenaBtn');
-    const toggleDepoBtn = document.getElementById('toggleDepoBtn');
-    const arenaSection = document.getElementById('arenaSection');
-    const depoSection = document.getElementById('depoSection');
-
-    // DEPO ELEMENTS
-    const depoOptions = document.querySelectorAll('.depo-option');
-    const executeDepoBtn = document.getElementById('executeDepoBtn');
-    const historyList = document.getElementById('historyList');
-
-    // MATCH GAME ELEMENTS
-    const betOptions = document.querySelectorAll('.bet-option');
-    const playBtn = document.getElementById('playBtn');
-    const statusText = document.getElementById('statusText');
+    const gameCards = document.querySelectorAll('.game-card');
+    const betModal = document.getElementById('betModal');
+    const modalGameTitle = document.getElementById('modalGameTitle');
+    const betSelectBtns = document.querySelectorAll('.bet-select-btn');
+    const startMatchmakingBtn = document.getElementById('startMatchmakingBtn');
     const inGameScreen = document.getElementById('inGameScreen');
-    const gameBetStatus = document.getElementById('gameBetStatus');
-    const gameStatusAlert = document.getElementById('gameStatusAlert');
-    const opponentBox = document.getElementById('opponentBox');
-    const surrenderBtn = document.getElementById('surrenderBtn');
-    const p1Name = document.getElementById('p1Name');
-    const p1Avatar = document.getElementById('p1Avatar');
-    const p2Name = document.getElementById('p2Name');
-    const p2Avatar = document.getElementById('p2Avatar');
-    const matchHeaderStatus = document.getElementById('matchHeaderStatus');
+    const gameCanvas = document.getElementById('gameCanvas');
+    const turnIndicator = document.getElementById('turnIndicator');
+    const scoreBoardZone = document.getElementById('scoreBoardZone');
+    const ludoController = document.getElementById('ludoController');
+    const rollDiceBtn = document.getElementById('rollDiceBtn');
+    const diceResult = document.getElementById('diceResult');
 
-    // 1. SIDEBAR & MENU TOGGLE ACTION
-    function toggleSidebar() {
-      sidebar.classList.toggle('-translate-x-full');
-      overlay.classList.toggle('hidden');
-    }
-    menuBtn.addEventListener('click', toggleSidebar);
-    closeSidebarBtn.addEventListener('click', toggleSidebar);
-    overlay.addEventListener('click', toggleSidebar);
+    // TAB MANAGEMENT KASIR
+    const tabDepoBtn = document.getElementById('tabDepoBtn');
+    const tabWdBtn = document.getElementById('tabWdBtn');
+    const panelDeposit = document.getElementById('panelDeposit');
+    const panelWithdraw = document.getElementById('panelWithdraw');
 
-    toggleArenaBtn.addEventListener('click', () => {
-      arenaSection.classList.remove('hidden');
-      depoSection.classList.add('hidden');
-      toggleArenaBtn.className = "w-full flex items-center gap-3 px-4 py-3 bg-amber-500/10 border border-amber-500/30 text-white rounded-xl font-medium text-left";
-      toggleDepoBtn.className = "w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-800/40 text-gray-400 hover:text-white rounded-xl font-medium text-left";
-      if(window.innerWidth < 768) toggleSidebar();
+    tabDepoBtn.addEventListener('click', () => {
+      tabDepoBtn.className = "px-6 py-2 border-b-2 border-amber-500 font-empire text-sm text-white font-bold";
+      tabWdBtn.className = "px-6 py-2 border-b-2 border-transparent font-empire text-sm text-gray-400 hover:text-white";
+      panelDeposit.classList.remove('hidden');
+      panelWithdraw.classList.add('hidden');
     });
 
-    toggleDepoBtn.addEventListener('click', () => {
-      arenaSection.classList.add('hidden');
-      depoSection.classList.remove('hidden');
-      toggleDepoBtn.className = "w-full flex items-center gap-3 px-4 py-3 bg-orange-500/10 border border-orange-500/30 text-white rounded-xl font-medium text-left";
-      toggleArenaBtn.className = "w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-800/40 text-gray-400 hover:text-white rounded-xl font-medium text-left";
-      if(window.innerWidth < 768) toggleSidebar();
+    tabWdBtn.addEventListener('click', () => {
+      tabWdBtn.className = "px-6 py-2 border-b-2 border-green-500 font-empire text-sm text-white font-bold";
+      tabDepoBtn.className = "px-6 py-2 border-b-2 border-transparent font-empire text-sm text-gray-400 hover:text-white";
+      panelWithdraw.classList.remove('hidden');
+      panelDeposit.classList.add('hidden');
     });
 
-    // 2. KASIR & PROSES ISI ULANG SALDO
-    depoOptions.forEach(opt => {
-      opt.addEventListener('click', () => {
-        depoOptions.forEach(b => b.classList.replace('bg-orange-500/20', 'bg-gray-800'));
-        opt.classList.replace('bg-gray-800', 'bg-orange-500/20');
-        currentDepoValue = parseInt(opt.getAttribute('data-value'));
+    // AKTIVASI KLIK KATALOG GAME
+    gameCards.forEach(card => {
+      card.addEventListener('click', () => {
+        if (!auth.currentUser) return alert("Masuk Arena Dulu Bos!");
+        chosenGame = card.getAttribute('data-game');
+        modalGameTitle.textContent = `TARUHAN ${chosenGame.toUpperCase()}`;
+        betModal.classList.remove('hidden');
       });
     });
 
-    executeDepoBtn.addEventListener('click', async () => {
-      if(!auth.currentUser) return alert("Silakan Login Terlebih Dahulu!");
-      if(currentDepoValue <= 0) return alert("Pilih nominal saldo pengisian!");
+    document.getElementById('closeBetModal').addEventListener('click', () => betModal.classList.add('hidden'));
 
-      const userRef = db.collection('users').doc(auth.currentUser.uid);
-      try {
-        await db.runTransaction(async (transaction) => {
-          const userDoc = await transaction.get(userRef);
-          let coinsNow = 0;
-          if (userDoc.exists) coinsNow = userDoc.data().coins || 0;
-          
-          transaction.set(userRef, { coins: coinsNow + currentDepoValue }, { merge: true });
-          
-          const newTxRef = db.collection('users').doc(auth.currentUser.uid).collection('history').doc();
-          transaction.set(newTxRef, {
-            type: 'DEPOSIT SUCCESS',
-            amount: currentDepoValue,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-          });
-        });
-        alert(`Sukses menambahkan 🪙 ${currentDepoValue.toLocaleString()} Koin!`);
-      } catch (err) {
-        alert("Gagal melakukan deposit, periksa izin Rules Firestore lu!");
-      }
-    });
-
-    // 3. PILIHAN TARUHAN GAME
-    betOptions.forEach(button => {
-      button.addEventListener('click', () => {
-        if (!auth.currentUser) return alert("Woi! Login dulu lewat tombol 'MASUK ARENA'!");
-        if (isSearching) return;
-
-        betOptions.forEach(btn => btn.classList.replace('bg-orange-500/10', 'bg-gray-800/80'));
-        button.classList.replace('bg-gray-800/80', 'bg-orange-500/10');
-
-        selectedAmount = parseInt(button.getAttribute('data-amount'));
-        statusText.innerHTML = `SIAP BERTANDING DENGAN TARUHAN <span class="text-amber-400 font-comic text-lg">🪙 ${selectedAmount.toLocaleString()}</span> KOIN.`;
-        
-        playBtn.disabled = false;
-        playBtn.classList.remove('bg-gray-700', 'text-gray-500', 'cursor-not-allowed');
-        playBtn.classList.add('bg-gradient-to-r', 'from-amber-500', 'to-orange-500', 'text-gray-950', 'hover:from-amber-600');
+    betSelectBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        betSelectBtns.forEach(b => b.classList.remove('border-amber-500','border-2'));
+        btn.classList.add('border-amber-500','border-2');
+        selectedAmount = parseInt(btn.getAttribute('data-amount'));
       });
     });
 
-    // 4. REAL-TIME PVP MATCHMAKING MATCH
-    playBtn.addEventListener('click', () => {
-      if (!isSearching) startRealtimeMatchmaking(); else cancelMatchmaking();
+    startMatchmakingBtn.addEventListener('click', () => {
+      if (selectedAmount <= 0) return alert("Pilih Besaran Nominal Bet!");
+      if (userCurrentCoins < selectedAmount) return alert("Koin Taruhan Lu Kurang!");
+      betModal.classList.add('hidden');
+      executeServerMatchmaking();
     });
 
-    async function startRealtimeMatchmaking() {
-      isSearching = true;
+    // UNIFIED ENGINE MATCHMAKING MULTIGAME
+    async function executeServerMatchmaking() {
       const user = auth.currentUser;
-
-      playBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> MENCARI LAWAN...`;
-      playBtn.classList.replace('from-amber-500', 'from-red-600');
-      playBtn.classList.replace('to-orange-500', 'to-red-700');
-      statusText.innerHTML = `<span class="text-orange-500 font-empire font-black animate-pulse">MEMINDAI ANTRIAN SERVER...</span>`;
-      betOptions.forEach(btn => btn.disabled = true);
-
-      p1Name.textContent = user.displayName || "Player Pro";
-      p1Avatar.src = user.photoURL || "https://via.placeholder.com/150";
-      gameBetStatus.textContent = `BET: 🪙 ${selectedAmount.toLocaleString()}`;
-      gameStatusAlert.textContent = "MEMASUKI ANTRIAN MATCHMAKING...";
+      document.getElementById('p1Display').textContent = `YOU: ${user.displayName}`;
+      document.getElementById('gameBetStatus').textContent = `BET: 🪙 ${selectedAmount.toLocaleString()}`;
+      
+      scoreBoardZone.classList.add('hidden');
+      ludoController.classList.add('hidden');
+      gameCanvas.innerHTML = "<p class='text-gray-500 text-xs font-empire uppercase animate-pulse'>Memindai Server Lobby...</p>";
       inGameScreen.classList.remove('hidden');
 
-      try {
-        const queueSnapshot = await db.collection('queues')
-          .where('amount', '==', selectedAmount)
-          .where('status', '==', 'waiting')
-          .limit(1).get();
+      const collectionName = chosenGame === 'Catur' ? 'chess_matches' : (chosenGame === 'Ludo' ? 'ludo_matches' : 'ttt_matches');
 
-        if (!queueSnapshot.empty) {
-          const hostQueue = queueSnapshot.docs[0];
-          if (hostQueue.data().userId !== user.uid) {
-            currentMatchId = hostQueue.id;
-            await db.collection('queues').doc(currentMatchId).update({
-              status: 'playing',
-              player2: { uid: user.uid, name: user.displayName, photo: user.photoURL }
-            });
-            listenToMatchUpdates(currentMatchId);
-            return;
-          }
-        }
+      const snapshot = await db.collection(collectionName)
+        .where('amount', '==', selectedAmount)
+        .where('status', '==', 'waiting')
+        .limit(1).get();
 
+      if (!snapshot.empty) {
+        const matchDoc = snapshot.docs[0];
+        currentMatchId = matchDoc.id;
+        amIHost = false;
+
+        let updatePayload = {
+          status: 'playing',
+          player2: { uid: user.uid, name: user.displayName },
+          turn: 'host'
+        };
+        await db.collection(collectionName).doc(currentMatchId).update(updatePayload);
+      } else {
         currentMatchId = user.uid + "_" + Date.now();
-        await db.collection('queues').doc(currentMatchId).set({
-          amount: selectedAmount, status: 'waiting', userId: user.uid,
-          player1: { uid: user.uid, name: user.displayName, photo: user.photoURL },
-          player2: null
-        });
-        listenToMatchUpdates(currentMatchId);
+        amIHost = true;
 
-      } catch (err) {
-        alert("Firestore Error! Silakan periksa aturan tab Rules Database Firestore.");
-        cancelMatchmaking();
-      }
-    }
+        let initialPayload = {
+          amount: selectedAmount,
+          status: 'waiting',
+          player1: { uid: user.uid, name: user.displayName },
+          player2: null,
+          turn: 'host'
+        };
 
-    function listenToMatchUpdates(matchId) {
-      unsubscribeMatch = db.collection('queues').doc(matchId).onSnapshot((doc) => {
-        if (!doc.exists) return;
-        const matchData = doc.data();
-
-        if (matchData.status === 'playing' && matchData.player2) {
-          matchHeaderStatus.textContent = "MATCH BERLANGSUNG";
-          const isAmIPlayer1 = matchData.player1.uid === auth.currentUser.uid;
-          const opponent = isAmIPlayer1 ? matchData.player2 : matchData.player1;
-
-          p2Name.textContent = opponent.name;
-          p2Avatar.src = opponent.photo;
-          opponentBox.classList.remove('opacity-0');
-          gameStatusAlert.textContent = "GAME STARTED! PVP REAL-TIME READY! ⚔️";
+        if (chosenGame === 'Catur') {
+          initialPayload.board = JSON.stringify([
+            ['r','n','b','q','k','b','n','r'],['p','p','p','p','p','p','p','p'],
+            ['','','','','','','',''],['','','','','','','',''],
+            ['','','','','','','',''],['','','','','','','',''],
+            ['P','P','P','P','P','P','P','P'],['R','N','B','Q','K','B','N','R']
+          ]);
+        } else if (chosenGame === 'TicTacToe') {
+          initialPayload.board = JSON.stringify(['','','','','','','','','']);
+          initialPayload.scores = { host: 0, guest: 0 };
+        } else if (chosenGame === 'Ludo') {
+          initialPayload.positions = JSON.stringify({ host: 0, guest: 0 });
+          initialPayload.lastDice = 1;
         }
-      }, () => {
-        alert("Koneksi antrean database terputus!");
-        cancelMatchmaking();
-      });
-    }
 
-    async function cancelMatchmaking() {
-      isSearching = false;
-      if (unsubscribeMatch) unsubscribeMatch();
-      if (currentMatchId) {
-        await db.collection('queues').doc(currentMatchId).delete().catch(() => {});
+        await db.collection(collectionName).doc(currentMatchId).set(initialPayload);
       }
-      currentMatchId = null;
-
-      playBtn.innerHTML = `<i class="fas fa-gamepad"></i> MAIN SEKARANG`;
-      playBtn.classList.replace('from-red-600', 'from-amber-500');
-      playBtn.classList.replace('to-red-700', 'to-orange-500');
-      statusText.innerHTML = `SIAP BERTANDING DENGAN TARUHAN <span class="text-amber-400 font-comic text-lg">🪙 ${selectedAmount.toLocaleString()}</span> KOIN.`;
-      betOptions.forEach(btn => btn.disabled = false);
-
-      inGameScreen.classList.add('hidden');
-      opponentBox.classList.add('opacity-0');
-      matchHeaderStatus.textContent = "MENCARI LAWAN...";
-      gameStatusAlert.textContent = "Menghubungkan ke Server Arena...";
+      runGameEngineListener(collectionName);
     }
 
-    surrenderBtn.addEventListener('click', () => { if (confirm("Keluar dari Antrean?")) cancelMatchmaking(); });
+    function runGameEngineListener(collectionName) {
+      unsubscribeMatch = db.collection(collectionName).doc(currentMatchId).onSnapshot(doc => {
+        if(!doc.exists) return;
+        const data = doc.data();
 
-    // 5. MONITOR SALDO REAL-TIME & RIWAYAT TRANSAKSI
-    function startMonitoringUser(uid) {
-      unsubscribeUser = db.collection('users').doc(uid).onSnapshot((doc) => {
-        if(doc.exists && doc.data().coins !== undefined) {
-          userCoins.textContent = `🪙 ${doc.data().coins.toLocaleString()} KOIN`;
-        } else {
-          userCoins.textContent = `🪙 0 KOIN`;
-        }
-      });
+        if (data.status === 'playing') {
+          document.getElementById('matchHeaderStatus').textContent = `${chosenGame.toUpperCase()} COMPETITION`;
+          const opponent = amIHost ? data.player2 : data.player1;
+          document.getElementById('p2Display').textContent = `ENEMY: ${opponent.name}`;
 
-      db.collection('users').doc(uid).collection('history').orderBy('timestamp', 'desc').limit(5)
-        .onSnapshot((snap) => {
-          if(snap.empty) {
-            historyList.innerHTML = `<div class="p-3 bg-gray-800/40 rounded-xl border border-gray-800 text-center text-gray-500">Belum ada riwayat transaksi.</div>`;
-            return;
+          myTurn = (data.turn === 'host' && amIHost) || (data.turn === 'guest' && !amIHost);
+          if (myTurn) {
+            turnIndicator.textContent = "🔴 GILIRAN LU! JALANKAN AKSI";
+            turnIndicator.className = "font-comic text-lg text-green-400 animate-pulse";
+          } else {
+            turnIndicator.textContent = "⏳ TUNGGU GILIRAN MUSUH...";
+            turnIndicator.className = "font-comic text-lg text-gray-500";
           }
-          historyList.innerHTML = "";
-          snap.forEach(doc => {
-            const h = doc.data();
-            historyList.innerHTML += `
-              <div class="flex justify-between items-center p-3 bg-gray-800/50 rounded-xl border border-gray-700/30">
-                <span class="text-green-400 font-bold">✓ ${h.type}</span>
-                <span class="text-amber-400 font-comic text-sm">+ 🪙 ${h.amount ? h.amount.toLocaleString() : 0}</span>
-              </div>`;
-          });
-        });
+
+          if (chosenGame === 'Catur') {
+            boardStateChess = JSON.parse(data.board);
+            renderChessVisual();
+          } else if (chosenGame === 'TicTacToe') {
+            boardStateTTT = JSON.parse(data.board);
+            scoreBoardZone.classList.remove('hidden');
+            scoreBoardZone.textContent = `SCORE BEST OF 3: (YOU) ${amIHost ? data.scores.host : data.scores.guest} - ${amIHost ? data.scores.guest : data.scores.host} (ENEMY)`;
+            renderTTTVisual();
+          } else if (chosenGame === 'Ludo') {
+            ludoPositions = JSON.parse(data.positions);
+            ludoController.classList.remove('hidden');
+            diceResult.textContent = `🎲 ANGKA: ${data.lastDice}`;
+            rollDiceBtn.disabled = !myTurn;
+            renderLudoVisual();
+          }
+        }
+
+        if (data.status === 'finished') {
+          handleSystemMatchFinished(data.winnerId);
+        }
+      });
     }
 
-    // 6. LOGIN ENGINE & LOGIKA SPESIFIK BONUS AKUN LOJU50066@GMAIL.COM
-    loginBtn.addEventListener('click', () => {
-      if (auth.currentUser) {
-        auth.signOut().then(() => alert("Berhasil keluar arena!"));
-        return;
-      }
-      auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(e => alert(e.message));
-    });
+    // ==========================================
+    // 1. CHESS ENGINE VISUAL
+    // ==========================================
+    function renderChessVisual() {
+      gameCanvas.innerHTML = "";
+      const boardDOM = document.createElement('div');
+      boardDOM.className = "chess-board shadow-xl";
+      const range = amIHost ? [0,1,2,3,4,5,6,7] : [7,6,5,4,3,2,1,0];
 
-    auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        loginBtn.innerHTML = `<i class="fas fa-sign-out-alt"></i> KELUAR`;
-        loginBtn.className = "bg-gradient-to-r from-red-600 to-red-700 text-white font-black px-5 py-2 rounded-xl transition text-sm flex items-center gap-2 font-empire shadow-lg cursor-pointer";
-        userName.textContent = user.displayName;
-        userAvatar.src = user.photoURL;
-        userProfile.classList.remove('hidden');
-
-        // ==== SISTEM PEMBERIAN BONUS 10.000 KOIN OTOMATIS ====
-        const userRef = db.collection('users').doc(user.uid);
-        try {
-          const userDoc = await userRef.get();
+      for (let r of range) {
+        for (let c = 0; c < 8; c++) {
+          const square = document.createElement('div');
+          square.className = `chess-square ${(r+c)%2===0 ? 'square-light':'square-dark'}`;
+          const piece = boardStateChess[r][c];
+          square.textContent = pieceSymbols[piece] || '';
           
-          if (!userDoc.exists) {
-            let initialCoins = 0;
-            
-            // Validasi string email
-            if (user.email === 'loju50066@gmail.com') {
-              initialCoins = 10000; // Inject saldo koin awal
+          if (selectedSquare && selectedSquare.r === r && selectedSquare.c === c) square.classList.add('square-selected');
+          
+          square.addEventListener('click', () => {
+            if(!myTurn) return;
+            if(selectedSquare === null) {
+              if(piece === '') return;
+              if((amIHost && piece!==piece.toUpperCase()) || (!amIHost && piece===piece.toUpperCase())) return;
+              selectedSquare = {r,c};
+              renderChessVisual();
+            } else {
+              const fromR = selectedSquare.r; const fromC = selectedSquare.c;
+              if (fromR===r && fromC===c) { selectedSquare=null; renderChessVisual(); return; }
               
-              // Tulis ke manifest history transaksi user
-              await userRef.collection('history').add({
-                type: 'BONUS AWAL GMAIL',
-                amount: 10000,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+              boardStateChess[r][c] = boardStateChess[fromR][fromC];
+              boardStateChess[fromR][fromC] = '';
+              selectedSquare = null;
+
+              db.collection('chess_matches').doc(currentMatchId).update({
+                board: JSON.stringify(boardStateChess),
+                turn: amIHost ? 'guest' : 'host'
               });
             }
-            
-            // Simpan pendaftaran profile baru ke database
-            await userRef.set({
-              name: user.displayName,
-              email: user.email,
-              photo: user.photoURL,
-              coins: initialCoins
-            }, { merge: true });
-          }
-        } catch (error) {
-          console.error("Gagal memproses data user baru:", error);
+          });
+          boardDOM.appendChild(square);
         }
-        // ===================================================
+      }
+      gameCanvas.appendChild(boardDOM);
+    }
 
-        startMonitoringUser(user.uid);
+    // ==========================================
+    // 2. TIC-TAC-TOE BEST OF 3
+    // ==========================================
+    function renderTTTVisual() {
+      gameCanvas.innerHTML = "";
+      const boardDOM = document.createElement('div');
+      boardDOM.className = "ttt-board";
+
+      for (let i = 0; i < 9; i++) {
+        const square = document.createElement('div');
+        square.className = "ttt-square text-white";
+        square.textContent = boardStateTTT[i];
+        if(boardStateTTT[i] === 'X') square.classList.add('text-blue-500');
+        if(boardStateTTT[i] === 'O') square.classList.add('text-red-500');
+
+        square.addEventListener('click', async () => {
+          if(!myTurn || boardStateTTT[i] !== '') return;
+          boardStateTTT[i] = amIHost ? 'X' : 'O';
+
+          const snap = await db.collection('ttt_matches').doc(currentMatchId).get();
+          let liveScores = snap.data().scores;
+
+          const winLine = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+          let roundWinner = null;
+          for (let line of winLine) {
+            const [a,b,c] = line;
+            if(boardStateTTT[a] && boardStateTTT[a]===boardStateTTT[b] && boardStateTTT[a]===boardStateTTT[c]) {
+              roundWinner = boardStateTTT[a];
+            }
+          }
+          if(!boardStateTTT.includes('') && !roundWinner) roundWinner = 'DRAW';
+
+          if (roundWinner) {
+            if (roundWinner === 'X') liveScores.host++;
+            if (roundWinner === 'O') liveScores.guest++;
+            
+            if (liveScores.host === 2 || liveScores.guest === 2) {
+              await db.collection('ttt_matches').doc(currentMatchId).update({
+                status: 'finished',
+                winnerId: liveScores.host === 2 ? 'host' : 'guest'
+              });
+              return;
+            } else {
+              boardStateTTT = ['','','','','','','','',''];
+            }
+          }
+
+          await db.collection('ttt_matches').doc(currentMatchId).update({
+            board: JSON.stringify(boardStateTTT),
+            scores: liveScores,
+            turn: amIHost ? 'guest' : 'host'
+          });
+        });
+        boardDOM.appendChild(square);
+      }
+      gameCanvas.appendChild(boardDOM);
+    }
+
+    // ==========================================
+    // 3. LUDO MINI ENGINE
+    // ==========================================
+    function renderLudoVisual() {
+      gameCanvas.innerHTML = "";
+      const ludoDOM = document.createElement('div');
+      ludoDOM.className = "ludo-board";
+
+      for (let i = 0; i < 15; i++) {
+        const cell = document.createElement('div');
+        cell.className = "ludo-cell bg-slate-800 text-gray-500";
+        
+        if (i === 0) { cell.className = "ludo-cell bg-blue-600 text-white"; cell.textContent = "START H"; }
+        else if (i === 4) { cell.className = "ludo-cell bg-red-600 text-white"; cell.textContent = "START G"; }
+        else if (i === 12) { cell.className = "ludo-cell bg-yellow-500 text-gray-950 font-black animate-pulse"; cell.textContent = "FINISH"; }
+        else if ([1,2,3,7,11,10,9,8,13,14].includes(i)) { cell.className = "ludo-cell bg-gray-700 text-gray-300"; cell.textContent = `•`; }
+        else { cell.className = "ludo-cell bg-slate-900/40 opacity-20"; }
+
+        if (i === ludoPositions.host) {
+          const token = document.createElement('div');
+          token.className = "w-6 h-6 bg-blue-400 border-2 border-white rounded-full absolute z-10 flex items-center justify-center font-bold text-xs text-black";
+          token.textContent = "H";
+          cell.appendChild(token);
+        }
+        if (i === ludoPositions.guest) {
+          const token = document.createElement('div');
+          token.className = "w-6 h-6 bg-red-500 border-2 border-white rounded-full absolute z-10 flex items-center justify-center font-bold text-xs text-white";
+          token.textContent = "G";
+          cell.appendChild(token);
+        }
+
+        ludoDOM.appendChild(cell);
+      }
+      gameCanvas.appendChild(ludoDOM);
+    }
+
+    rollDiceBtn.addEventListener('click', async () => {
+      if(!myTurn) return;
+      rollDiceBtn.disabled = true;
+
+      const rolledNumber = Math.floor(Math.random() * 3) + 1;
+      
+      if (amIHost) {
+        ludoPositions.host = Math.min(ludoPositions.host + rolledNumber, 12);
       } else {
-        loginBtn.innerHTML = `<i class="fab fa-google"></i> MASUK ARENA`;
-        loginBtn.className = "bg-gradient-to-r from-amber-500 to-orange-500 text-gray-950 font-black px-5 py-2 rounded-xl transition text-sm flex items-center gap-2 font-empire shadow-lg cursor-pointer";
-        userProfile.classList.add('hidden');
-        if (unsubscribeUser) unsubscribeUser();
-        cancelMatchmaking();
+        ludoPositions.guest = Math.min(ludoPositions.guest + rolledNumber, 12);
+      }
+
+      const collectionName = 'ludo_matches';
+      let updatePayload = {
+        positions: JSON.stringify(ludoPositions),
+        lastDice: rolledNumber,
+        turn: amIHost ? 'guest' : 'host'
+      };
+
+      if (ludoPositions.host === 12) {
+        updatePayload.status = 'finished';
+        updatePayload.winnerId = 'host';
+      } else if (ludoPositions.guest === 12) {
+        updatePayload.status = 'finished';
+        updatePayload.winnerId = 'guest';
+      }
+
+      await db.collection(collectionName).doc(currentMatchId).update(updatePayload);
+    });
+
+    // ==========================================
+    // SYSTEM SETTLEMENT AMBIL HADIAH (POTONG 10% DI AMBIL)
+    // ==========================================
+    async function handleSystemMatchFinished(winnerId) {
+      if(unsubscribeMatch) unsubscribeMatch();
+      const myUid = auth.currentUser.uid;
+      
+      const amIWinner = (winnerId === 'host' && amIHost) || (winnerId === 'guest' && !amIHost);
+      const isDraw = winnerId === 'DRAW';
+
+      if (isDraw) {
+        turnIndicator.textContent = "🤝 PERTANDINGAN SERI / DRAW!";
+        turnIndicator.className = "font-comic text-2xl text-yellow-400";
+      } else if (amIWinner) {
+        turnIndicator.textContent = "🏆 LU MENANG! HADIAH DIKIRIM!";
+        turnIndicator.className = "font-comic text-2xl text-green-400 animate-bounce";
+        
+        // Player 1 Taruhan + Player 2 Taruhan = Total Koin Meja Judi
+        const totalUangMeja = selectedAmount * 2;
+        const komisiOwner10 = totalUangMeja * 0.10; // Potongan Admin 10%
+        const hadiahBersihPemain = totalUangMeja - komisiOwner10;
+
+        // Ditambahkan ke database pemain pemenang
+        const profitMurniMasukDompet = hadiahBersihPemain - selectedAmount;
+
+        await db.collection('users').doc(myUid).update({ 
+          coins: firebase.firestore.FieldValue.increment(profitMurniMasukDompet) 
+        });
+      } else {
+        turnIndicator.textContent = "❌ LU KALAH! SALDO TERPOTONG!";
+        turnIndicator.className = "font-comic text-2xl text-red-500";
+        await db.collection('users').doc(myUid).update({ coins: firebase.firestore.FieldValue.increment(-selectedAmount) });
+      }
+
+      setTimeout(() => {
+        inGameScreen.classList.add('hidden');
+        currentMatchId = null;
+        selectedAmount = 0;
+      }, 4000);
+    }
+
+    // ==========================================
+    // LOGIKA PENGAJUAN WITHDRAW (WD) KE BACKEND XENDIT
+    // ==========================================
+    document.getElementById('executeWdBtn').addEventListener('click', async () => {
+      if (!auth.currentUser) return alert("Login dulu!");
+      
+      const amountToWd = parseInt(document.getElementById('wdAmountInput').value);
+      const bankCode = document.getElementById('wdBankCode').value;
+      const accountNumber = document.getElementById('wdAccountNumber').value;
+      const accountName = document.getElementById('wdAccountName').value;
+
+      if (!amountToWd || amountToWd < 10000) return alert("Minimal penarikan adalah 10.000 Koin!");
+      if (!accountNumber || !accountName) return alert("Mohon lengkapi data rekening tujuan!");
+      if (userCurrentCoins < amountToWd) return alert("Koin dompet lu gak cukup bro!");
+
+      if (!confirm(`Yakin mau WD sebesar 🪙 ${amountToWd.toLocaleString()}?`)) return;
+
+      const myUid = auth.currentUser.uid;
+
+      try {
+        // Langkah 1: Potong koin di Firebase saat itu juga (Mencegah Double WD)
+        await db.collection('users').doc(myUid).update({
+          coins: firebase.firestore.FieldValue.increment(-amountToWd)
+        });
+
+        // Langkah 2: Kirim instruksi transaksi aman ke Backend API Xendit Lu
+        const response = await fetch(`${BACKEND_API_URL}/api/withdraw`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            uid: myUid,
+            amount: amountToWd,
+            bankCode: bankCode,
+            accountNumber: accountNumber,
+            accountName: accountName
+          })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          alert(`WD Berhasil Diajukan! Xendit sedang mentransfer Rp ${result.payoutAmount.toLocaleString()} ke rekening lu.`);
+          // Reset Form inputan
+          document.getElementById('wdAmountInput').value = "";
+          document.getElementById('wdAccountNumber').value = "";
+          document.getElementById('wdAccountName').value = "";
+        } else {
+          // Jika backend gagal kirim duit, kembalikan koin player
+          alert("Gagal memproses WD: " + result.message);
+          await db.collection('users').doc(myUid).update({
+            coins: firebase.firestore.FieldValue.increment(amountToWd)
+          });
+        }
+      } catch (error) {
+        console.error(error);
+        alert("Koneksi ke backend bermasalah!");
+      }
+    });
+
+    document.getElementById('surrenderBtn').addEventListener('click', async () => {
+      if(!currentMatchId) return inGameScreen.classList.add('hidden');
+      if(confirm("Beneran Mau Nyerah? Koin Auto Hangus Lho!")) {
+        const collectionName = chosenGame === 'Catur' ? 'chess_matches' : (chosenGame === 'Ludo' ? 'ludo_matches' : 'ttt_matches');
+        await db.collection(collectionName).doc(currentMatchId).update({ status: 'finished', winnerId: amIHost ? 'guest' : 'host' });
+      }
+    });
+
+    document.getElementById('toggleArenaBtn').addEventListener('click', () => {
+      document.getElementById('arenaSection').classList.remove('hidden');
+      document.getElementById('depoSection').classList.add('hidden');
+    });
+    document.getElementById('toggleDepoBtn').addEventListener('click', () => {
+      document.getElementById('arenaSection').classList.add('hidden');
+      document.getElementById('depoSection').classList.remove('hidden');
+    });
+
+    // SIMULASI DEPOSIT SCRIPT
+    const depoOptions = document.querySelectorAll('.depo-option');
+    let activeDepoVal = 0;
+    depoOptions.forEach(opt => {
+      opt.addEventListener('click', () => {
+        depoOptions.forEach(b => b.classList.remove('bg-orange-500/20'));
+        opt.classList.add('bg-orange-500/20');
+        activeDepoVal = parseInt(opt.getAttribute('data-value'));
+      });
+    });
+
+    document.getElementById('executeDepoBtn').addEventListener('click', async () => {
+      if(!auth.currentUser || activeDepoVal <= 0) return alert("Pilih Nominal Isi Koin!");
+      await db.collection('users').doc(auth.currentUser.uid).update({ coins: firebase.firestore.FieldValue.increment(activeDepoVal) });
+      alert("Sukses Top Up!");
+    });
+
+    // AUTH OBSERVER MONITOR
+    auth.onAuthStateChanged(user => {
+      if(user) {
+        document.getElementById('userName').textContent = user.displayName;
+        document.getElementById('userAvatar').src = user.photoURL;
+        document.getElementById('userProfile').classList.remove('hidden');
+        document.getElementById('loginBtn').className = "hidden";
+
+        unsubscribeUser = db.collection('users').doc(user.uid).onSnapshot(doc => {
+          if(doc.exists) {
+            userCurrentCoins = doc.data().coins || 0;
+            document.getElementById('userCoins').textContent = `🪙 ${userCurrentCoins.toLocaleString()} KOIN`;
+          } else {
+            db.collection('users').doc(user.uid).set({ name: user.displayName, coins: 5000 });
+          }
+        });
       }
     });
   </script>
