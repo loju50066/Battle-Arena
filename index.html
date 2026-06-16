@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ARENA MULTIGAME PRO V5.2 - FIX LOGIC</title>
+  <title>ARENA MULTIGAME PRO V5.3 - FULL STACK REALTIME</title>
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Orbitron:wght@500;800;900&display=swap" rel="stylesheet">
@@ -13,20 +13,20 @@
     .font-comic { font-family: 'Bangers', cursive; tracking-wide: 0.05em; }
     #sidebar { transition: transform 0.3s ease-in-out; }
     
-    /* CHESS STYLE */
+    /* CHESS STYLE DISPLAY MATRIX */
     .chess-board { display: grid; grid-template-columns: repeat(8, 1fr); width: 100%; max-width: 340px; aspect-ratio: 1; border: 4px solid #1e293b; }
     .chess-square { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; cursor: pointer; user-select: none; }
     .square-light { background: #f1f5f9; color: #1e293b; }
     .square-dark { background: #64748b; color: #f8fafc; }
     .square-selected { background: #eab308 !important; }
     .square-valid-move { position: relative; }
-    .square-valid-move::after { content: ''; position: absolute; width: 12px; h: 12px; background: rgba(34, 197, 94, 0.6); border-radius: 50%; }
+    .square-valid-move::after { content: ''; position: absolute; width: 12px; height: 12px; background: rgba(34, 197, 94, 0.6); border-radius: 50%; }
 
-    /* TIC TAC TOE STYLE */
+    /* TIC TAC TOE STYLE GRID */
     .ttt-board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; width: 100%; max-width: 280px; aspect-ratio: 1; }
     .ttt-square { background: #1e293b; border: 2px solid #334155; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 3rem; font-weight: 900; cursor: pointer; border-radius: 12px; }
 
-    /* LUDO CROSS BOARD STYLE */
+    /* LUDO CROSS BOARD STYLE MATRIX 5x5 */
     .ludo-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; width: 100%; max-width: 320px; aspect-ratio: 1; background: #0f172a; padding: 6px; border-radius: 12px; }
     .ludo-tile { aspect-ratio: 1; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold; position: relative; background: #1e293b; }
   </style>
@@ -115,21 +115,21 @@
                 <div>
                   <label class="block text-[11px] font-empire text-gray-400 mb-1">PILIH BANK / E-WALLET</label>
                   <select id="wdBankCode" class="w-full bg-gray-900 border border-gray-800 px-4 py-3 rounded-xl text-sm font-empire focus:outline-none text-white">
+                    <option value="DANA">DANA (E-Wallet)</option>
                     <option value="BCA">BCA (Bank Central Asia)</option>
                     <option value="BNI">BNI (Bank Negara Indonesia)</option>
                     <option value="BRI">BRI (Bank Rakyat Indonesia)</option>
                     <option value="MANDIRI">MANDIRI (Bank Mandiri)</option>
-                    <option value="DANA">DANA (E-Wallet)</option>
                   </select>
                 </div>
                 <div>
                   <label class="block text-[11px] font-empire text-gray-400 mb-1">NOMOR REKENING / NO HP</label>
-                  <input type="text" id="wdAccountNumber" placeholder="Contoh: 82910392XX" class="w-full bg-gray-900 border border-gray-800 px-4 py-3 rounded-xl text-sm font-empire focus:outline-none text-white">
+                  <input type="text" id="wdAccountNumber" placeholder="Contoh: 0812XXXXXXXX / 812XXXXXX" class="w-full bg-gray-900 border border-gray-800 px-4 py-3 rounded-xl text-sm font-empire focus:outline-none text-white">
                 </div>
               </div>
               <div>
                 <label class="block text-[11px] font-empire text-gray-400 mb-1">NAMA PEMILIK REKENING</label>
-                <input type="text" id="wdAccountName" placeholder="Harus sesuai rekening bank" class="w-full bg-gray-900 border border-gray-800 px-4 py-3 rounded-xl text-sm font-empire focus:outline-none text-white">
+                <input type="text" id="wdAccountName" placeholder="Harus sesuai rekening bank/e-wallet" class="w-full bg-gray-900 border border-gray-800 px-4 py-3 rounded-xl text-sm font-empire focus:outline-none text-white">
               </div>
             </div>
             <button id="executeWdBtn" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-gray-950 font-black py-4 rounded-xl font-empire tracking-widest uppercase shadow-lg cursor-pointer">KIRIM PENARIKAN (WD) VIA XENDIT</button>
@@ -182,6 +182,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
   <script>
+    // 1. STATE INITIALIZATION ENGINE MODULE
     const firebaseConfig = {
       apiKey: "AIzaSyAvGeziF9PkZpWMGAv9RF8ZpWK_0eYUHRI",
       authDomain: "battle-arena-bd9e4.firebaseapp.com",
@@ -215,7 +216,21 @@
       'r':'♖','n':'♘','b':'♗','q':'♕','k':'♔','p':'♙','':''
     };
 
-    // FIXED: LOGIKA TOGGLE MENU GARIS 3 SIDEBAR
+    // 2. STABLE OAUTH TRIGGER GOOGLE DISPATCHER MODULE
+    const loginBtn = document.getElementById('loginBtn');
+    loginBtn.addEventListener('click', () => {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider)
+        .then((result) => {
+          console.log("Authenticated User Successfully Set Identity:", result.user.displayName);
+        })
+        .catch((error) => {
+          console.error("Authentication Process Error Interrupted:", error);
+          alert("Gagal koneksi ke Google Auth: " + error.message);
+        });
+    });
+
+    // 3. UI SIDEBAR HAMBURGER CONTROLLER NAVIGATION MODULE
     const menuBtn = document.getElementById('menuBtn');
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('overlay');
@@ -224,11 +239,10 @@
       sidebar.classList.toggle('-translate-x-full');
       overlay.classList.toggle('hidden');
     }
-
     menuBtn.addEventListener('click', toggleSidebar);
     overlay.addEventListener('click', toggleSidebar);
 
-    // TAB MANAGEMENT KASIR
+    // 4. FINANCIAL NAVIGATION DASHBOARD CONSOLE TABS
     const tabDepoBtn = document.getElementById('tabDepoBtn');
     const tabWdBtn = document.getElementById('tabWdBtn');
     const panelDeposit = document.getElementById('panelDeposit');
@@ -248,6 +262,7 @@
       panelDeposit.classList.add('hidden');
     });
 
+    // 5. SELECTION MECHANICS ROOM MODAL & PRE-MATCH LOBBY DISPATCHER
     const gameCards = document.querySelectorAll('.game-card');
     const betModal = document.getElementById('betModal');
     const modalGameTitle = document.getElementById('modalGameTitle');
@@ -287,6 +302,7 @@
       executeServerMatchmaking();
     });
 
+    // 6. REAL-TIME MULTIPLAYER MATCHMAKING MECHANICS DISPATCHER
     async function executeServerMatchmaking() {
       const user = auth.currentUser;
       document.getElementById('p1Display').textContent = `YOU: ${user.displayName}`;
@@ -351,6 +367,7 @@
       runGameEngineListener(collectionName);
     }
 
+    // 7. FIREBASE DB FIRESTORE MULTI-STREAM LISTENER ENGINE
     function runGameEngineListener(collectionName) {
       unsubscribeMatch = db.collection(collectionName).doc(currentMatchId).onSnapshot(doc => {
         if(!doc.exists) return;
@@ -393,29 +410,23 @@
       });
     }
 
-    // =========================================================================
-    // REVISI: CHESS ENGINE WITH VALID LOGIC (PION TIDAK BISA ASAL MAJU/MAKAN)
-    // =========================================================================
+    // 8. LOGICAL SUB-ENGINE DEVELOPMENT MODULE: REAL-CHESS VALIDATION RULE
     function getValidMoves(r, c, piece) {
       let validMoves = [];
       if (piece.toLowerCase() === 'p') {
-        // Logika Gerak Pion Terkontrol
-        if (piece === 'P' && amIHost) { // Host Pion Putih (Maju ke Atas)
+        if (piece === 'P' && amIHost) { 
           if (r > 0 && boardStateChess[r-1][c] === '') validMoves.push({r: r-1, c: c});
           if (r === 6 && boardStateChess[r-1][c] === '' && boardStateChess[r-2][c] === '') validMoves.push({r: r-2, c: c});
-          // Makan Diagonal Putih
           if (r > 0 && c > 0 && boardStateChess[r-1][c-1] !== '' && boardStateChess[r-1][c-1] === boardStateChess[r-1][c-1].toLowerCase()) validMoves.push({r: r-1, c: c-1});
           if (r > 0 && c < 7 && boardStateChess[r-1][c+1] !== '' && boardStateChess[r-1][c+1] === boardStateChess[r-1][c+1].toLowerCase()) validMoves.push({r: r-1, c: c+1});
         } 
-        else if (piece === 'p' && !amIHost) { // Guest Pion Hitam (Maju ke Bawah di Layarnya)
+        else if (piece === 'p' && !amIHost) { 
           if (r < 7 && boardStateChess[r+1][c] === '') validMoves.push({r: r+1, c: c});
           if (r === 1 && boardStateChess[r+1][c] === '' && boardStateChess[r+2][c] === '') validMoves.push({r: r+2, c: c});
-          // Makan Diagonal Hitam
           if (r < 7 && c > 0 && boardStateChess[r+1][c-1] !== '' && boardStateChess[r+1][c-1] === boardStateChess[r+1][c-1].toUpperCase()) validMoves.push({r: r+1, c: c-1});
           if (r < 7 && c < 7 && boardStateChess[r+1][c+1] !== '' && boardStateChess[r+1][c+1] === boardStateChess[r+1][c+1].toUpperCase()) validMoves.push({r: r+1, c: c+1});
         }
       } else {
-        // Untuk piece besar selain pion (R, N, B, Q, K), izinkan gerak bebas radius 2 kotak demi fleksibilitas mini gameplay
         let range = [-2, -1, 0, 1, 2];
         for (let dr of range) {
           for (let dc of range) {
@@ -426,7 +437,6 @@
               if (targetPiece === '') {
                 validMoves.push({r: targetR, c: targetC});
               } else {
-                // Hanya boleh makan jika warna berbeda
                 if (piece === piece.toUpperCase() && targetPiece === targetPiece.toLowerCase()) validMoves.push({r: targetR, c: targetC});
                 if (piece === piece.toLowerCase() && targetPiece === targetPiece.toUpperCase()) validMoves.push({r: targetR, c: targetC});
               }
@@ -442,7 +452,6 @@
       const boardDOM = document.createElement('div');
       boardDOM.className = "chess-board shadow-xl";
       
-      // Sinkronisasi Orientasi Layar Pemain
       const range = amIHost ? [0,1,2,3,4,5,6,7] : [7,6,5,4,3,2,1,0];
       let activeValidMoves = selectedSquare ? getValidMoves(selectedSquare.r, selectedSquare.c, boardStateChess[selectedSquare.r][selectedSquare.c]) : [];
 
@@ -462,7 +471,6 @@
             if(!myTurn) return;
             if(selectedSquare === null) {
               if(piece === '') return;
-              // Validasi kepemilikan buah catur (Host = Putih/Kapital, Guest = Hitam/Kecil)
               if((amIHost && piece !== piece.toUpperCase()) || (!amIHost && piece === piece.toUpperCase())) return;
               selectedSquare = {r,c};
               renderChessVisual();
@@ -476,7 +484,6 @@
                 return; 
               }
               
-              // Cek Gerakan Valid
               let moves = getValidMoves(fromR, fromC, boardStateChess[fromR][fromC]);
               let moveAllowed = moves.some(m => m.r === r && m.c === c);
               
@@ -496,7 +503,6 @@
                 turn: amIHost ? 'guest' : 'host'
               };
 
-              // GAME OVER WINNER LOGIC: Jika salah satu King ('K' atau 'k') dimakan
               if (destinationPiece === 'k') {
                 updatePayload.status = 'finished';
                 updatePayload.winnerId = 'host';
@@ -514,9 +520,7 @@
       gameCanvas.appendChild(boardDOM);
     }
 
-    // ==========================================
-    // TIC-TAC-TOE BEST OF 3 ENGINE
-    // ==========================================
+    // 9. LOGICAL SUB-ENGINE DEVELOPMENT MODULE: TIC TAC TOE MECHANICS
     function renderTTTVisual() {
       gameCanvas.innerHTML = "";
       const boardDOM = document.createElement('div');
@@ -572,15 +576,12 @@
       gameCanvas.appendChild(boardDOM);
     }
 
-    // =========================================================================
-    // REVISI: LUDO CROSS BOARD REALISTIC MAP (PETA SALIB MEMUTAR + HOME AREA)
-    // =========================================================================
-    // Koordinat Jalur Putar Ludo Mini 5x5 Grid (Total 16 Ubin Putar)
+    // 10. LOGICAL SUB-ENGINE DEVELOPMENT MODULE: LUDO SEARAH JARUM JAM WITH HOME & METADATA GRID MAP
     const ludoTrackRoute = [
       {r:0, c:2}, {r:0, c:3}, {r:1, c:3}, {r:2, c:4}, 
       {r:3, c:4}, {r:3, c:3}, {r:4, c:2}, {r:4, c:1},
       {r:3, c:1}, {r:2, c:0}, {r:1, c:0}, {r:1, c:1},
-      {r:0, c:1}, {r:1, c:2}, {r:2, c:2} // Index 14 adalah Pusat Finish Markas Tengah
+      {r:0, c:1}, {r:1, c:2}, {r:2, c:2}
     ];
 
     function renderLudoVisual() {
@@ -588,47 +589,41 @@
       const boardDOM = document.createElement('div');
       boardDOM.className = "ludo-grid shadow-2xl border-4 border-slate-800";
 
-      // Gambar Grid 5x5 Matrix
       for (let r = 0; r < 5; r++) {
         for (let c = 0; c < 5; c++) {
           const tile = document.createElement('div');
           tile.className = "ludo-tile text-gray-600";
 
-          // Desain Blok Estetika Sudut Rumah
           if (r === 0 && c === 0) { tile.className = "ludo-tile bg-blue-600/30 border border-blue-500/50"; tile.textContent = "🏠 H"; }
           else if (r === 0 && c === 4) { tile.className = "ludo-tile bg-red-600/30 border border-red-500/50"; tile.textContent = "🏠 G"; }
           else if (r === 4 && c === 4) tile.className = "ludo-tile bg-gray-800/40";
           else if (r === 4 && c === 0) tile.className = "ludo-tile bg-gray-800/40";
           
-          // Cari apakah koordinat masuk jalur Ludo
           let trackIndex = ludoTrackRoute.findIndex(t => t.r === r && t.c === c);
           if (trackIndex !== -1) {
             tile.className = "ludo-tile bg-slate-700 text-slate-300 border border-slate-600";
-            if (trackIndex === 0) tile.className = "ludo-tile bg-blue-600 text-white font-bold"; // Start Host
-            if (trackIndex === 4) tile.className = "ludo-tile bg-red-600 text-white font-bold";  // Start Guest
+            if (trackIndex === 0) tile.className = "ludo-tile bg-blue-600 text-white font-bold"; 
+            if (trackIndex === 4) tile.className = "ludo-tile bg-red-600 text-white font-bold";  
             if (trackIndex === 14) {
-              tile.className = "ludo-tile bg-gradient-to-br from-amber-400 to-yellow-500 text-gray-950 font-black animate-pulse";
+              tile.className = "ludo-tile bg-gradient-to-br from-amber-400 to-yellow-500 text-gray-950 font-black";
               tile.textContent = "GOAL";
             } else {
               tile.textContent = trackIndex;
             }
           }
 
-          // Render Token Pemain Host (H)
           if (trackIndex === ludoPositions.host) {
             const p1Token = document.createElement('div');
-            p1Token.className = "w-6 h-6 bg-blue-400 border-2 border-white rounded-full absolute z-10 flex items-center justify-center font-black text-xs text-black shadow-md";
+            p1Token.className = "w-6 h-6 bg-blue-400 border-2 border-white rounded-full absolute z-10 flex items-center justify-center font-black text-xs text-black";
             p1Token.textContent = "H";
             tile.appendChild(p1Token);
           }
-          // Render Token Pemain Guest (G)
           if (trackIndex === ludoPositions.guest) {
             const p2Token = document.createElement('div');
-            p2Token.className = "w-6 h-6 bg-red-500 border-2 border-white rounded-full absolute z-10 flex items-center justify-center font-black text-xs text-white shadow-md";
+            p2Token.className = "w-6 h-6 bg-red-500 border-2 border-white rounded-full absolute z-10 flex items-center justify-center font-black text-xs text-white";
             p2Token.textContent = "G";
             tile.appendChild(p2Token);
           }
-
           boardDOM.appendChild(tile);
         }
       }
@@ -639,11 +634,10 @@
       if(!myTurn) return;
       rollDiceBtn.disabled = true;
 
-      // Kocok dadu angka 1 sampai 3 langkah
       const rolledNumber = Math.floor(Math.random() * 3) + 1;
       
       if (amIHost) {
-        ludoPositions.host = Math.min(ludoPositions.host + rolledNumber, 14); // Batas Maksimal Index Lintasan Ludo adalah 14
+        ludoPositions.host = Math.min(ludoPositions.host + rolledNumber, 14); 
       } else {
         ludoPositions.guest = Math.min(ludoPositions.guest + rolledNumber, 14);
       }
@@ -655,7 +649,6 @@
         turn: amIHost ? 'guest' : 'host'
       };
 
-      // Cek kemenangan Goal Pusat Ludo
       if (ludoPositions.host === 14) {
         updatePayload.status = 'finished';
         updatePayload.winnerId = 'host';
@@ -667,9 +660,7 @@
       await db.collection(collectionName).doc(currentMatchId).update(updatePayload);
     });
 
-    // ==========================================
-    // SETTLEMENT WINNER COIN MANAGEMENT
-    // ==========================================
+    // 11. IN-GAME SETTLEMENT: WIN/LOSS WALLET COIN TRANSACTION TRANSITION
     async function handleSystemMatchFinished(winnerId) {
       if(unsubscribeMatch) unsubscribeMatch();
       const myUid = auth.currentUser.uid;
@@ -682,7 +673,7 @@
         turnIndicator.className = "font-comic text-2xl text-yellow-400";
       } else if (amIWinner) {
         turnIndicator.textContent = "🏆 LU MENANG! HADIAH DIKIRIM!";
-        turnIndicator.className = "font-comic text-2xl text-green-400 animate-bounce";
+        turnIndicator.className = "font-comic text-2xl text-green-400";
         
         const totalUangMeja = selectedAmount * 2;
         const komisiOwner10 = totalUangMeja * 0.10;
@@ -705,7 +696,7 @@
       }, 4000);
     }
 
-    // DISPATCH WITHDRAW REQUEST
+    // 12. ENDPOINT PACKET EXECUTOR: DISPATCH DISBURSEMENT WITHDRAW TO VERCEL BACKEND
     document.getElementById('executeWdBtn').addEventListener('click', async () => {
       if (!auth.currentUser) return alert("Login dulu!");
       
@@ -742,7 +733,7 @@
         const result = await response.json();
 
         if (result.success) {
-          alert(`WD Berhasil Diajukan! Xendit sedang mentransfer Rp ${result.payoutAmount.toLocaleString()} ke rekening lu.`);
+          alert(`WD Berhasil! Xendit sedang memproses transfer Rp ${result.payoutAmount.toLocaleString()} ke nomor/rekening lu.`);
           document.getElementById('wdAmountInput').value = "";
           document.getElementById('wdAccountNumber').value = "";
           document.getElementById('wdAccountName').value = "";
@@ -754,7 +745,7 @@
         }
       } catch (error) {
         console.error(error);
-        alert("Terjadi kendala koneksi sistem serverless Vercel.");
+        alert("Terjadi kendala koneksi sistem.");
       }
     });
 
@@ -791,21 +782,31 @@
       alert("Sukses Top Up!");
     });
 
+    // 13. SESSION STATE REAL-TIME INITIALIZER (CREATES AUTOMATIC NEW ACCOUNTS MODAL BALANCE)
     auth.onAuthStateChanged(user => {
       if(user) {
         document.getElementById('userName').textContent = user.displayName;
         document.getElementById('userAvatar').src = user.photoURL;
         document.getElementById('userProfile').classList.remove('hidden');
-        document.getElementById('loginBtn').className = "hidden";
+        document.getElementById('loginBtn').classList.add('hidden');
 
-        unsubscribeUser = db.collection('users').doc(user.uid).onSnapshot(doc => {
+        const userRef = db.collection('users').doc(user.uid);
+        
+        unsubscribeUser = userRef.onSnapshot(doc => {
           if(doc.exists) {
             userCurrentCoins = doc.data().coins || 0;
             document.getElementById('userCoins').textContent = `🪙 ${userCurrentCoins.toLocaleString()} KOIN`;
           } else {
-            db.collection('users').doc(user.uid).set({ name: user.displayName, coins: 5000 });
+            userRef.set({ 
+              name: user.displayName, 
+              coins: 50000 
+            });
           }
         });
+      } else {
+        document.getElementById('userProfile').classList.add('hidden');
+        document.getElementById('loginBtn').classList.remove('hidden');
+        if (unsubscribeUser) unsubscribeUser();
       }
     });
   </script>
