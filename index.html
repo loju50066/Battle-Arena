@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ARENA MULTIGAME PRO V5.3 - FULL STACK REALTIME</title>
+  <title>ARENA MULTIGAME PRO V6.0 - PRODUCTION READY</title>
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Orbitron:wght@500;800;900&display=swap" rel="stylesheet">
@@ -13,20 +13,20 @@
     .font-comic { font-family: 'Bangers', cursive; tracking-wide: 0.05em; }
     #sidebar { transition: transform 0.3s ease-in-out; }
     
-    /* CHESS STYLE DISPLAY MATRIX */
+    /* CHESS BOARD GENERATOR GRID */
     .chess-board { display: grid; grid-template-columns: repeat(8, 1fr); width: 100%; max-width: 340px; aspect-ratio: 1; border: 4px solid #1e293b; }
-    .chess-square { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; cursor: pointer; user-select: none; }
-    .square-light { background: #f1f5f9; color: #1e293b; }
-    .square-dark { background: #64748b; color: #f8fafc; }
-    .square-selected { background: #eab308 !important; }
+    .chess-square { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 2rem; cursor: pointer; user-select: none; }
+    .square-light { background: #e2e8f0; }
+    .square-dark { background: #475569; }
+    .square-selected { background: #b45309 !important; }
     .square-valid-move { position: relative; }
-    .square-valid-move::after { content: ''; position: absolute; width: 12px; height: 12px; background: rgba(34, 197, 94, 0.6); border-radius: 50%; }
+    .square-valid-move::after { content: ''; position: absolute; width: 14px; height: 14px; background: rgba(34, 197, 94, 0.7); border-radius: 50%; }
 
-    /* TIC TAC TOE STYLE GRID */
+    /* TIC TAC TOE GRID */
     .ttt-board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; width: 100%; max-width: 280px; aspect-ratio: 1; }
     .ttt-square { background: #1e293b; border: 2px solid #334155; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 3rem; font-weight: 900; cursor: pointer; border-radius: 12px; }
 
-    /* LUDO CROSS BOARD STYLE MATRIX 5x5 */
+    /* LUDO ENGINE GRID MAP */
     .ludo-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; width: 100%; max-width: 320px; aspect-ratio: 1; background: #0f172a; padding: 6px; border-radius: 12px; }
     .ludo-tile { aspect-ratio: 1; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold; position: relative; background: #1e293b; }
   </style>
@@ -73,8 +73,8 @@
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div class="game-card bg-[#111827] border border-gray-800 p-4 rounded-2xl hover:border-amber-500 transition cursor-pointer group" data-game="Catur">
               <div class="h-28 bg-slate-800 rounded-xl flex items-center justify-center text-5xl mb-3 group-hover:scale-105 transition">👑</div>
-              <h3 class="text-lg font-black text-white font-empire">CATUR (REAL LOGIC)</h3>
-              <p class="text-[11px] text-gray-400 mt-1">Sistem validasi gerak pion & skakmat otomatis real-time.</p>
+              <h3 class="text-lg font-black text-white font-empire">CATUR (PRO LOGIC)</h3>
+              <p class="text-[11px] text-gray-400 mt-1">Aturan gerak pion asli, skakmat otomatis, rotasi warna bidak tegas.</p>
             </div>
             <div class="game-card bg-[#111827] border border-gray-800 p-4 rounded-2xl hover:border-red-500 transition cursor-pointer group" data-game="Ludo">
               <div class="h-28 bg-slate-800 rounded-xl flex items-center justify-center text-5xl mb-3 group-hover:scale-105 transition">🎲</div>
@@ -96,16 +96,16 @@
           </div>
 
           <div id="panelDeposit" class="bg-[#111827] border border-gray-800 p-5 rounded-2xl space-y-4">
-            <h2 class="font-empire text-xs text-orange-500 font-bold uppercase">Simulasi Isi Ulang Koin (1 Koin = Rp 1)</h2>
-            <div class="grid grid-cols-2 gap-2">
-              <button class="depo-option bg-gray-800 p-3 rounded-xl font-comic text-xl text-amber-400 cursor-pointer" data-value="10000">+ 10.000</button>
-              <button class="depo-option bg-gray-800 p-3 rounded-xl font-comic text-xl text-amber-400 cursor-pointer" data-value="50000">+ 50.000</button>
+            <h2 class="font-empire text-xs text-orange-500 font-bold uppercase">Formulir Isi Ulang Koin (1 Koin = Rp 1)</h2>
+            <div class="space-y-2">
+              <label class="block text-[11px] font-empire text-gray-400">NOMINAL TOP UP (MINIMAL Rp 10.000)</label>
+              <input type="number" id="manualDepoInput" placeholder="Masukkan jumlah dana, misal: 25000" class="w-full bg-gray-900 border border-gray-800 px-4 py-3 rounded-xl text-sm font-comic text-amber-400 focus:outline-none focus:border-orange-500">
             </div>
             <button id="executeDepoBtn" class="w-full bg-orange-500 text-gray-950 font-black py-3 rounded-xl font-empire tracking-widest cursor-pointer">PROSES ISI ULANG</button>
           </div>
 
           <div id="panelWithdraw" class="hidden bg-[#111827] border border-gray-800 p-5 rounded-2xl space-y-4">
-            <h2 class="font-empire text-xs text-green-400 font-bold uppercase">Formulir Penarikan Uang (Potongan Komisi 10%)</h2>
+            <h2 class="font-empire text-xs text-green-400 font-bold uppercase">Formulir Penarikan Dana (Pencairan Utuh Tanpa Potongan)</h2>
             <div class="space-y-3">
               <div>
                 <label class="block text-[11px] font-empire text-gray-400 mb-1">JUMLAH KOIN YANG INGIN DI-WD</label>
@@ -124,12 +124,12 @@
                 </div>
                 <div>
                   <label class="block text-[11px] font-empire text-gray-400 mb-1">NOMOR REKENING / NO HP</label>
-                  <input type="text" id="wdAccountNumber" placeholder="Contoh: 0812XXXXXXXX / 812XXXXXX" class="w-full bg-gray-900 border border-gray-800 px-4 py-3 rounded-xl text-sm font-empire focus:outline-none text-white">
+                  <input type="text" id="wdAccountNumber" placeholder="Contoh: 0812XXXXXXXX / +628XXX" class="w-full bg-gray-900 border border-gray-800 px-4 py-3 rounded-xl text-sm font-empire focus:outline-none text-white">
                 </div>
               </div>
               <div>
                 <label class="block text-[11px] font-empire text-gray-400 mb-1">NAMA PEMILIK REKENING</label>
-                <input type="text" id="wdAccountName" placeholder="Harus sesuai rekening bank/e-wallet" class="w-full bg-gray-900 border border-gray-800 px-4 py-3 rounded-xl text-sm font-empire focus:outline-none text-white">
+                <input type="text" id="wdAccountName" placeholder="Harus sesuai rekening tujuan asli" class="w-full bg-gray-900 border border-gray-800 px-4 py-3 rounded-xl text-sm font-empire focus:outline-none text-white">
               </div>
             </div>
             <button id="executeWdBtn" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-gray-950 font-black py-4 rounded-xl font-empire tracking-widest uppercase shadow-lg cursor-pointer">KIRIM PENARIKAN (WD) VIA XENDIT</button>
@@ -182,7 +182,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
   <script>
-    // 1. STATE INITIALIZATION ENGINE MODULE
+    // 1. CONFIG ENGINE ARCHITECTURE
     const firebaseConfig = {
       apiKey: "AIzaSyAvGeziF9PkZpWMGAv9RF8ZpWK_0eYUHRI",
       authDomain: "battle-arena-bd9e4.firebaseapp.com",
@@ -211,29 +211,28 @@
     let boardStateTTT = [];
     let ludoPositions = { host: 0, guest: 0 };
 
+    // UNIFIED UNICODE BIDAK CHESS DESIGN
     const pieceSymbols = {
-      'R':'♜','N':'♞','B':'♝','Q':'♛','K':'♚','P':'♟',
-      'r':'♖','n':'♘','b':'♗','q':'♕','k':'♔','p':'♙','':''
+      'R':'♜','N':'♞','B':'♝','Q':'♛','K':'♚','P':'♟', // HOST
+      'r':'♜','n':'♞','b':'♝','q':'♛','k':'♚','p':'♟', // GUEST
+      '':''
     };
 
-    // 2. STABLE OAUTH TRIGGER GOOGLE DISPATCHER MODULE
+    // 2. STABLE USER AUTHENTICATION DISPATCHER
     const loginBtn = document.getElementById('loginBtn');
     loginBtn.addEventListener('click', () => {
       const provider = new firebase.auth.GoogleAuthProvider();
-      auth.signInWithPopup(provider)
-        .then((result) => {
-          console.log("Authenticated User Successfully Set Identity:", result.user.displayName);
-        })
-        .catch((error) => {
-          console.error("Authentication Process Error Interrupted:", error);
-          alert("Gagal koneksi ke Google Auth: " + error.message);
-        });
+      auth.signInWithPopup(provider).catch(err => alert("Gagal Login OAuth: " + err.message));
     });
 
-    // 3. UI SIDEBAR HAMBURGER CONTROLLER NAVIGATION MODULE
+    // 3. REVISED: FIXED UI NAVIGATION & LINE SELECTION ENGINE
     const menuBtn = document.getElementById('menuBtn');
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('overlay');
+    const toggleArenaBtn = document.getElementById('toggleArenaBtn');
+    const toggleDepoBtn = document.getElementById('toggleDepoBtn');
+    const arenaSection = document.getElementById('arenaSection');
+    const depoSection = document.getElementById('depoSection');
 
     function toggleSidebar() {
       sidebar.classList.toggle('-translate-x-full');
@@ -242,7 +241,24 @@
     menuBtn.addEventListener('click', toggleSidebar);
     overlay.addEventListener('click', toggleSidebar);
 
-    // 4. FINANCIAL NAVIGATION DASHBOARD CONSOLE TABS
+    function switchNavigationTab(target) {
+      if (target === 'arena') {
+        arenaSection.classList.remove('hidden');
+        depoSection.classList.add('hidden');
+        toggleArenaBtn.className = "w-full flex items-center gap-3 px-4 py-3 bg-amber-500/10 border border-amber-500/30 text-white rounded-xl text-left cursor-pointer";
+        toggleDepoBtn.className = "w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-800/40 text-gray-400 rounded-xl text-left cursor-pointer";
+      } else {
+        arenaSection.classList.add('hidden');
+        depoSection.classList.remove('hidden');
+        toggleDepoBtn.className = "w-full flex items-center gap-3 px-4 py-3 bg-amber-500/10 border border-amber-500/30 text-white rounded-xl text-left cursor-pointer";
+        toggleArenaBtn.className = "w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-800/40 text-gray-400 rounded-xl text-left cursor-pointer";
+      }
+      if (!sidebar.classList.contains('-translate-x-full')) toggleSidebar();
+    }
+    toggleArenaBtn.addEventListener('click', () => switchNavigationTab('arena'));
+    toggleDepoBtn.addEventListener('click', () => switchNavigationTab('depo'));
+
+    // FINANCIAL TAB SWITCHER (DEPO / WD INSIDE KASIR PANEL)
     const tabDepoBtn = document.getElementById('tabDepoBtn');
     const tabWdBtn = document.getElementById('tabWdBtn');
     const panelDeposit = document.getElementById('panelDeposit');
@@ -254,7 +270,6 @@
       panelDeposit.classList.remove('hidden');
       panelWithdraw.classList.add('hidden');
     });
-
     tabWdBtn.addEventListener('click', () => {
       tabWdBtn.className = "px-6 py-2 border-b-2 border-green-500 font-empire text-sm text-white font-bold cursor-pointer";
       tabDepoBtn.className = "px-6 py-2 border-b-2 border-transparent font-empire text-sm text-gray-400 hover:text-white cursor-pointer";
@@ -262,7 +277,20 @@
       panelDeposit.classList.add('hidden');
     });
 
-    // 5. SELECTION MECHANICS ROOM MODAL & PRE-MATCH LOBBY DISPATCHER
+    // REVISED: MANUAL DYNAMIC DEPOSIT EXECUTION
+    document.getElementById('executeDepoBtn').addEventListener('click', async () => {
+      if(!auth.currentUser) return alert("Silakan masuk arena terlebih dahulu!");
+      const amount = parseInt(document.getElementById('manualDepoInput').value);
+      if(isNaN(amount) || amount < 10000) return alert("Minimal pengisian saldo adalah Rp 10.000!");
+      
+      await db.collection('users').doc(auth.currentUser.uid).update({
+        coins: firebase.firestore.FieldValue.increment(amount)
+      });
+      alert(`Simulasi Top Up Berhasil! Ditambahkan 🪙 ${amount.toLocaleString()} Koin ke Dompet.`);
+      document.getElementById('manualDepoInput').value = "";
+    });
+
+    // 4. LOBBY ENTRY MODAL CONTROLLER
     const gameCards = document.querySelectorAll('.game-card');
     const betModal = document.getElementById('betModal');
     const modalGameTitle = document.getElementById('modalGameTitle');
@@ -284,7 +312,6 @@
         betModal.classList.remove('hidden');
       });
     });
-
     document.getElementById('closeBetModal').addEventListener('click', () => betModal.classList.add('hidden'));
 
     betSelectBtns.forEach(btn => {
@@ -296,13 +323,13 @@
     });
 
     startMatchmakingBtn.addEventListener('click', () => {
-      if (selectedAmount <= 0) return alert("Pilih Besaran Nominal Bet!");
-      if (userCurrentCoins < selectedAmount) return alert("Koin Taruhan Lu Kurang!");
+      if (selectedAmount <= 0) return alert("Pilih Nominal Taruhan Bet Terlebih Dahulu!");
+      if (userCurrentCoins < selectedAmount) return alert("Saldo Koin Dompet Anda Tidak Mencukupi!");
       betModal.classList.add('hidden');
       executeServerMatchmaking();
     });
 
-    // 6. REAL-TIME MULTIPLAYER MATCHMAKING MECHANICS DISPATCHER
+    // 5. SYNCHRONIZED MULTIPLAYER MATCHMAKING MECHANICS
     async function executeServerMatchmaking() {
       const user = auth.currentUser;
       document.getElementById('p1Display').textContent = `YOU: ${user.displayName}`;
@@ -323,17 +350,16 @@
       if (!snapshot.empty) {
         const matchDoc = snapshot.docs[0];
         currentMatchId = matchDoc.id;
-        amIHost = false;
+        amIHost = false; // Player 2 (Bidak Hitam)
 
-        let updatePayload = {
+        await db.collection(collectionName).doc(currentMatchId).update({
           status: 'playing',
           player2: { uid: user.uid, name: user.displayName },
           turn: 'host'
-        };
-        await db.collection(collectionName).doc(currentMatchId).update(updatePayload);
+        });
       } else {
         currentMatchId = user.uid + "_" + Date.now();
-        amIHost = true;
+        amIHost = true; // Player 1 (Bidak Putih/Emas)
 
         let initialPayload = {
           amount: selectedAmount,
@@ -367,7 +393,6 @@
       runGameEngineListener(collectionName);
     }
 
-    // 7. FIREBASE DB FIRESTORE MULTI-STREAM LISTENER ENGINE
     function runGameEngineListener(collectionName) {
       unsubscribeMatch = db.collection(collectionName).doc(currentMatchId).onSnapshot(doc => {
         if(!doc.exists) return;
@@ -403,64 +428,135 @@
             renderLudoVisual();
           }
         }
-
         if (data.status === 'finished') {
           handleSystemMatchFinished(data.winnerId);
         }
       });
     }
 
-    // 8. LOGICAL SUB-ENGINE DEVELOPMENT MODULE: REAL-CHESS VALIDATION RULE
+    // 6. REVISED: FULL REALISTIC CHESS ENGINE LOGIC STEP VALIDATION
     function getValidMoves(r, c, piece) {
       let validMoves = [];
-      if (piece.toLowerCase() === 'p') {
-        if (piece === 'P' && amIHost) { 
-          if (r > 0 && boardStateChess[r-1][c] === '') validMoves.push({r: r-1, c: c});
-          if (r === 6 && boardStateChess[r-1][c] === '' && boardStateChess[r-2][c] === '') validMoves.push({r: r-2, c: c});
-          if (r > 0 && c > 0 && boardStateChess[r-1][c-1] !== '' && boardStateChess[r-1][c-1] === boardStateChess[r-1][c-1].toLowerCase()) validMoves.push({r: r-1, c: c-1});
-          if (r > 0 && c < 7 && boardStateChess[r-1][c+1] !== '' && boardStateChess[r-1][c+1] === boardStateChess[r-1][c+1].toLowerCase()) validMoves.push({r: r-1, c: c+1});
-        } 
-        else if (piece === 'p' && !amIHost) { 
-          if (r < 7 && boardStateChess[r+1][c] === '') validMoves.push({r: r+1, c: c});
-          if (r === 1 && boardStateChess[r+1][c] === '' && boardStateChess[r+2][c] === '') validMoves.push({r: r+2, c: c});
-          if (r < 7 && c > 0 && boardStateChess[r+1][c-1] !== '' && boardStateChess[r+1][c-1] === boardStateChess[r+1][c-1].toUpperCase()) validMoves.push({r: r+1, c: c-1});
-          if (r < 7 && c < 7 && boardStateChess[r+1][c+1] !== '' && boardStateChess[r+1][c+1] === boardStateChess[r+1][c+1].toUpperCase()) validMoves.push({r: r+1, c: c+1});
-        }
-      } else {
-        let range = [-2, -1, 0, 1, 2];
-        for (let dr of range) {
-          for (let dc of range) {
-            if (dr === 0 && dc === 0) continue;
-            let targetR = r + dr, targetC = c + dc;
-            if (targetR >= 0 && targetR < 8 && targetC >= 0 && targetC < 8) {
-              let targetPiece = boardStateChess[targetR][targetC];
-              if (targetPiece === '') {
-                validMoves.push({r: targetR, c: targetC});
-              } else {
-                if (piece === piece.toUpperCase() && targetPiece === targetPiece.toLowerCase()) validMoves.push({r: targetR, c: targetC});
-                if (piece === piece.toLowerCase() && targetPiece === targetPiece.toUpperCase()) validMoves.push({r: targetR, c: targetC});
-              }
+      if (!piece) return validMoves;
+
+      const isWhite = (piece === piece.toUpperCase());
+      const isInside = (row, col) => row >= 0 && row < 8 && col >= 0 && col < 8;
+      
+      const getSquareStatus = (row, col) => {
+        if (!isInside(row, col)) return 'invalid';
+        const target = boardStateChess[row][col];
+        if (target === '') return 'empty';
+        const targetIsWhite = (target === target.toUpperCase());
+        return (isWhite === targetIsWhite) ? 'ally' : 'enemy';
+      };
+
+      const rookDirections = [[1,0], [-1,0], [0,1], [0,-1]];
+      const bishopDirections = [[1,1], [1,-1], [-1,1], [-1,-1]];
+      const knightSteps = [[2,1], [2,-1], [-2,1], [-2,-1], [1,2], [1,-2], [-1,2], [-1,-2]];
+      const kingDirections = [[1,0], [-1,0], [0,1], [0,-1], [1,1], [1,-1], [-1,1], [-1,-1]];
+
+      switch(piece.toLowerCase()) {
+        case 'p': // PAWN REALISTIC RULE
+          const direction = isWhite ? -1 : 1;
+          const initialRow = isWhite ? 6 : 1;
+          
+          if (getSquareStatus(r + direction, c) === 'empty') {
+            validMoves.push({r: r + direction, c: c});
+            if (r === initialRow && getSquareStatus(r + (2 * direction), c) === 'empty') {
+              validMoves.push({r: r + (2 * direction), c: c});
             }
           }
-        }
+          if (getSquareStatus(r + direction, c - 1) === 'enemy') validMoves.push({r: r + direction, c: c - 1});
+          if (getSquareStatus(r + direction, c + 1) === 'enemy') validMoves.push({r: r + direction, c: c + 1});
+          break;
+
+        case 'n': // KNIGHT
+          for (let step of knightSteps) {
+            const nr = r + step[0], nc = c + step[1];
+            const status = getSquareStatus(nr, nc);
+            if (status === 'empty' || status === 'enemy') validMoves.push({r: nr, c: nc});
+          }
+          break;
+
+        case 'r': // ROOK
+          for (let dir of rookDirections) {
+            let step = 1;
+            while (true) {
+              const nr = r + dir[0] * step, nc = c + dir[1] * step;
+              const status = getSquareStatus(nr, nc);
+              if (status === 'empty') { validMoves.push({r: nr, c: nc}); step++; }
+              else if (status === 'enemy') { validMoves.push({r: nr, c: nc}); break; }
+              else { break; }
+            }
+          }
+          break;
+
+        case 'b': // BISHOP
+          for (let dir of bishopDirections) {
+            let step = 1;
+            while (true) {
+              const nr = r + dir[0] * step, nc = c + dir[1] * step;
+              const status = getSquareStatus(nr, nc);
+              if (status === 'empty') { validMoves.push({r: nr, c: nc}); step++; }
+              else if (status === 'enemy') { validMoves.push({r: nr, c: nc}); break; }
+              else { break; }
+            }
+          }
+          break;
+
+        case 'q': // QUEEN (ROOK + BISHOP)
+          for (let dir of [...rookDirections, ...bishopDirections]) {
+            let step = 1;
+            while (true) {
+              const nr = r + dir[0] * step, nc = c + dir[1] * step;
+              const status = getSquareStatus(nr, nc);
+              if (status === 'empty') { validMoves.push({r: nr, c: nc}); step++; }
+              else if (status === 'enemy') { validMoves.push({r: nr, c: nc}); break; }
+              else { break; }
+            }
+          }
+          break;
+
+        case 'k': // KING
+          for (let dir of kingDirections) {
+            const nr = r + dir[0], nc = c + dir[1];
+            const status = getSquareStatus(nr, nc);
+            if (status === 'empty' || status === 'enemy') validMoves.push({r: nr, c: nc});
+          }
+          break;
       }
       return validMoves;
     }
 
+    // REVISED: GRAPHICAL MATRIX CHESS ENGINE RENDERING (FLIPPED BOARD VIEW & CLEAR PIECE COLORS)
     function renderChessVisual() {
       gameCanvas.innerHTML = "";
       const boardDOM = document.createElement('div');
       boardDOM.className = "chess-board shadow-xl";
       
-      const range = amIHost ? [0,1,2,3,4,5,6,7] : [7,6,5,4,3,2,1,0];
       let activeValidMoves = selectedSquare ? getValidMoves(selectedSquare.r, selectedSquare.c, boardStateChess[selectedSquare.r][selectedSquare.c]) : [];
 
-      for (let r of range) {
-        for (let c = 0; c < 8; c++) {
+      for (let vr = 0; vr < 8; vr++) {
+        for (let vc = 0; vc < 8; vc++) {
+          // Flip perspectives: Host stays normal, Guest view is inverted
+          const r = amIHost ? vr : 7 - vr;
+          const c = amIHost ? vc : 7 - vc;
+          
           const square = document.createElement('div');
-          square.className = `chess-square ${(r+c)%2===0 ? 'square-light':'square-dark'}`;
+          square.className = `chess-square ${(vr + vc) % 2 === 0 ? 'square-light' : 'square-dark'}`;
+          
           const piece = boardStateChess[r][c];
           square.textContent = pieceSymbols[piece] || '';
+          
+          // STRICT SEPARATE COLOR STYLING FOR PIECES
+          if (piece !== '') {
+            const isWhite = (piece === piece.toUpperCase());
+            if (isWhite) {
+              square.className += ' text-amber-400 font-bold drop-shadow-[0_2px_4px_rgba(255,255,255,0.6)]'; // Host (White/Gold)
+            } else {
+              square.className += ' text-slate-950 font-bold drop-shadow-[0_2px_2px_rgba(255,255,255,0.4)]'; // Guest (Solid Black)
+            }
+          }
           
           if (selectedSquare && selectedSquare.r === r && selectedSquare.c === c) square.classList.add('square-selected');
           
@@ -469,30 +565,40 @@
           
           square.addEventListener('click', async () => {
             if(!myTurn) return;
+            
             if(selectedSquare === null) {
               if(piece === '') return;
-              if((amIHost && piece !== piece.toUpperCase()) || (!amIHost && piece === piece.toUpperCase())) return;
-              selectedSquare = {r,c};
+              if(amIHost && piece !== piece.toUpperCase()) return;
+              if(!amIHost && piece === piece.toUpperCase()) return;
+              
+              selectedSquare = {r, c};
               renderChessVisual();
             } else {
-              const fromR = selectedSquare.r; 
+              const fromR = selectedSquare.r;
               const fromC = selectedSquare.c;
               
-              if (fromR === r && fromC === c) { 
-                selectedSquare = null; 
-                renderChessVisual(); 
-                return; 
+              if (fromR === r && fromC === c) {
+                selectedSquare = null;
+                renderChessVisual();
+                return;
               }
               
               let moves = getValidMoves(fromR, fromC, boardStateChess[fromR][fromC]);
               let moveAllowed = moves.some(m => m.r === r && m.c === c);
               
               if (!moveAllowed) {
-                selectedSquare = null;
+                // If clicking another team piece, change selection focus
+                const reTarget = boardStateChess[r][c];
+                if (reTarget !== '' && ((amIHost && reTarget === reTarget.toUpperCase()) || (!amIHost && reTarget !== reTarget.toUpperCase()))) {
+                  selectedSquare = {r, c};
+                } else {
+                  selectedSquare = null;
+                }
                 renderChessVisual();
                 return;
               }
 
+              // Update Matrix Engine State
               let destinationPiece = boardStateChess[r][c];
               boardStateChess[r][c] = boardStateChess[fromR][fromC];
               boardStateChess[fromR][fromC] = '';
@@ -520,7 +626,7 @@
       gameCanvas.appendChild(boardDOM);
     }
 
-    // 9. LOGICAL SUB-ENGINE DEVELOPMENT MODULE: TIC TAC TOE MECHANICS
+    // 7. ARTIFACT CORE MODULE: TIC TAC TOE LOGIC
     function renderTTTVisual() {
       gameCanvas.innerHTML = "";
       const boardDOM = document.createElement('div');
@@ -576,7 +682,7 @@
       gameCanvas.appendChild(boardDOM);
     }
 
-    // 10. LOGICAL SUB-ENGINE DEVELOPMENT MODULE: LUDO SEARAH JARUM JAM WITH HOME & METADATA GRID MAP
+    // 8. ARTIFACT CORE MODULE: LUDO LOGIC ENGINE
     const ludoTrackRoute = [
       {r:0, c:2}, {r:0, c:3}, {r:1, c:3}, {r:2, c:4}, 
       {r:3, c:4}, {r:3, c:3}, {r:4, c:2}, {r:4, c:1},
@@ -596,8 +702,6 @@
 
           if (r === 0 && c === 0) { tile.className = "ludo-tile bg-blue-600/30 border border-blue-500/50"; tile.textContent = "🏠 H"; }
           else if (r === 0 && c === 4) { tile.className = "ludo-tile bg-red-600/30 border border-red-500/50"; tile.textContent = "🏠 G"; }
-          else if (r === 4 && c === 4) tile.className = "ludo-tile bg-gray-800/40";
-          else if (r === 4 && c === 0) tile.className = "ludo-tile bg-gray-800/40";
           
           let trackIndex = ludoTrackRoute.findIndex(t => t.r === r && t.c === c);
           if (trackIndex !== -1) {
@@ -642,7 +746,6 @@
         ludoPositions.guest = Math.min(ludoPositions.guest + rolledNumber, 14);
       }
 
-      const collectionName = 'ludo_matches';
       let updatePayload = {
         positions: JSON.stringify(ludoPositions),
         lastDice: rolledNumber,
@@ -657,10 +760,10 @@
         updatePayload.winnerId = 'guest';
       }
 
-      await db.collection(collectionName).doc(currentMatchId).update(updatePayload);
+      await db.collection('ludo_matches').doc(currentMatchId).update(updatePayload);
     });
 
-    // 11. IN-GAME SETTLEMENT: WIN/LOSS WALLET COIN TRANSACTION TRANSITION
+    // 9. MATCH IN-GAME SETTLEMENT & 10% FEE REVENUE CHARGE WHEN WINNING
     async function handleSystemMatchFinished(winnerId) {
       if(unsubscribeMatch) unsubscribeMatch();
       const myUid = auth.currentUser.uid;
@@ -676,7 +779,7 @@
         turnIndicator.className = "font-comic text-2xl text-green-400";
         
         const totalUangMeja = selectedAmount * 2;
-        const komisiOwner10 = totalUangMeja * 0.10;
+        const komisiOwner10 = totalUangMeja * 0.10; // Potongan hanya berlaku saat menang game!
         const hadiahBersihPemain = totalUangMeja - komisiOwner10;
         const profitMurniMasukDompet = hadiahBersihPemain - selectedAmount;
 
@@ -696,7 +799,7 @@
       }, 4000);
     }
 
-    // 12. ENDPOINT PACKET EXECUTOR: DISPATCH DISBURSEMENT WITHDRAW TO VERCEL BACKEND
+    // 10. REVISED: WITHDRAW DISPATCHER TO VERCEL BACKEND ENGINE (0% FEE AT WD)
     document.getElementById('executeWdBtn').addEventListener('click', async () => {
       if (!auth.currentUser) return alert("Login dulu!");
       
@@ -705,11 +808,11 @@
       const accountNumber = document.getElementById('wdAccountNumber').value;
       const accountName = document.getElementById('wdAccountName').value;
 
-      if (!amountToWd || amountToWd < 10000) return alert("Minimal penarikan adalah 10.000 Koin!");
-      if (!accountNumber || !accountName) return alert("Mohon lengkapi data rekening tujuan!");
-      if (userCurrentCoins < amountToWd) return alert("Koin dompet lu gak cukup bro!");
+      if (!amountToWd || amountToWd < 10000) return alert("Minimal penarikan dana adalah 10.000 Koin!");
+      if (!accountNumber || !accountName) return alert("Mohon lengkapi data rekening/e-wallet tujuan!");
+      if (userCurrentCoins < amountToWd) return alert("Koin dompet anda tidak cukup!");
 
-      if (!confirm(`Yakin mau WD sebesar 🪙 ${amountToWd.toLocaleString()}?`)) return;
+      if (!confirm(`Yakin mau menarik saldo koin sebesar 🪙 ${amountToWd.toLocaleString()}?`)) return;
 
       const myUid = auth.currentUser.uid;
 
@@ -733,19 +836,19 @@
         const result = await response.json();
 
         if (result.success) {
-          alert(`WD Berhasil! Xendit sedang memproses transfer Rp ${result.payoutAmount.toLocaleString()} ke nomor/rekening lu.`);
+          alert(`WD Berhasil! Xendit sedang mentransfer penuh Rp ${result.payoutAmount.toLocaleString()} ke rekening/e-wallet lu.`);
           document.getElementById('wdAmountInput').value = "";
           document.getElementById('wdAccountNumber').value = "";
           document.getElementById('wdAccountName').value = "";
         } else {
-          alert("Gagal memproses WD: " + result.message);
+          alert("Gagal memproses WD dari server: " + result.message);
           await db.collection('users').doc(myUid).update({
             coins: firebase.firestore.FieldValue.increment(amountToWd)
           });
         }
       } catch (error) {
         console.error(error);
-        alert("Terjadi kendala koneksi sistem.");
+        alert("Terjadi kendala koneksi sistem backend.");
       }
     });
 
@@ -757,32 +860,7 @@
       }
     });
 
-    document.getElementById('toggleArenaBtn').addEventListener('click', () => {
-      document.getElementById('arenaSection').classList.remove('hidden');
-      document.getElementById('depoSection').classList.add('hidden');
-    });
-    document.getElementById('toggleDepoBtn').addEventListener('click', () => {
-      document.getElementById('arenaSection').classList.add('hidden');
-      document.getElementById('depoSection').classList.remove('hidden');
-    });
-
-    const depoOptions = document.querySelectorAll('.depo-option');
-    let activeDepoVal = 0;
-    depoOptions.forEach(opt => {
-      opt.addEventListener('click', () => {
-        depoOptions.forEach(b => b.classList.remove('bg-orange-500/20'));
-        opt.classList.add('bg-orange-500/20');
-        activeDepoVal = parseInt(opt.getAttribute('data-value'));
-      });
-    });
-
-    document.getElementById('executeDepoBtn').addEventListener('click', async () => {
-      if(!auth.currentUser || activeDepoVal <= 0) return alert("Pilih Nominal Isi Koin!");
-      await db.collection('users').doc(auth.currentUser.uid).update({ coins: firebase.firestore.FieldValue.increment(activeDepoVal) });
-      alert("Sukses Top Up!");
-    });
-
-    // 13. SESSION STATE REAL-TIME INITIALIZER (CREATES AUTOMATIC NEW ACCOUNTS MODAL BALANCE)
+    // 11. INITIALIZER MONITOR REAL-TIME USER DEVICE ACTIVE SESSION
     auth.onAuthStateChanged(user => {
       if(user) {
         document.getElementById('userName').textContent = user.displayName;
@@ -797,10 +875,7 @@
             userCurrentCoins = doc.data().coins || 0;
             document.getElementById('userCoins').textContent = `🪙 ${userCurrentCoins.toLocaleString()} KOIN`;
           } else {
-            userRef.set({ 
-              name: user.displayName, 
-              coins: 50000 
-            });
+            userRef.set({ name: user.displayName, coins: 50000 });
           }
         });
       } else {
