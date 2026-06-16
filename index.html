@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>ARENA PRO — Ultimate competitive Esports Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{
+  --void:#070a0e;
+  --panel:#0d121a;
+  --panel2:#131a26;
+  --border:#1b2330;
+  --border-active:#313f54;
+  --amber:#ffb627;
+  --amber-glow:rgba(255,182,39,0.2);
+  --teal:#2dd4bf;
+  --red:#f43f5e;
+  --strong:#f8fafc;
+  --text:#94a3b8;
+  --text-dim:#475569;
+  --font-main:'Sora', sans-serif;
+  --font-mono:'IBM Plex Mono', monospace;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased;}
+html, body {
+  background:var(--void);color:var(--text);font-family:var(--font-main);
+  overflow:hidden;position:relative;width:100%;max-width:100%;height:100vh;
+  overscroll-behavior:none;touch-action:none;user-select:none;-webkit-user-select:none;
+}
+
+.app-container{display:flex;flex-direction:column;height:100vh;width:100vw;}
+
+/* NAVBAR */
+.navbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;height:70px;background:var(--panel);
+  border-bottom:1px solid var(--border);flex-shrink:0;z-index:100;
+}
+.brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:22px;color:var(--strong);letter-spacing:-0.5px;}
+.brand-icon{width:32px;height:32px;background:linear-gradient(135deg, var(--amber), #f59e0b);border-radius:8px;}
+.session-zone{display:flex;align-items:center;gap:16px;}
+.wallet-badge{
+  font-family:var(--font-mono);font-weight:600;font-size:13px;color:var(--amber);
+  background:var(--panel2);border:1px solid var(--border);padding:8px 14px;border-radius:10px;
+}
+
+.btn{
+  padding:12px 24px;border-radius:10px;font-family:var(--font-main);
+  font-weight:700;font-size:13px;cursor:pointer;border:none;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s;
+}
+.btn-primary{background:var(--amber);color:var(--void);}
+.btn-primary:hover{box-shadow:0 0 20px var(--amber-glow);transform:translateY(-1px);}
+.btn-secondary{background:var(--panel2);color:var(--strong);border:1px solid var(--border);}
+
+/* MAIN CONTENT */
+.main-wrapper{display:flex;flex:1;overflow:hidden;}
+
+/* SIDEBAR WITH HISTORY BUTTONS */
+.sidebar-games{width:280px;background:var(--panel);border-right:1px solid var(--border);padding:24px 16px;display:flex;flex-direction:column;gap:12px;overflow-y:auto;}
+.sidebar-title{font-size:11px;font-weight:700;color:var(--text-dim);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px;padding-left:12px;}
+.game-tab{
+  display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:12px;
+  background:transparent;border:1px solid transparent;cursor:pointer;transition:all 0.2s;text-align:left;
+}
+.game-tab:hover{background:var(--panel2);}
+.game-tab.active{background:var(--panel2);border-color:var(--border-active);}
+.game-icon-frame{
+  width:36px;height:36px;border-radius:8px;background:var(--border);
+  display:flex;align-items:center;justify-content:center;color:var(--text-dim);transition:all 0.2s;
+}
+.game-tab.active .game-icon-frame{background:var(--amber-glow);color:var(--amber);}
+.game-info{display:flex;flex-direction:column;}
+.game-name{font-weight:700;font-size:14px;color:var(--text);}
+.game-tab.active .game-name{color:var(--strong);}
+
+/* PANEL ARENA & GRAPHICS VIEW */
+.arena-workspace{flex:1;padding:32px;display:grid;grid-template-columns:1.2fr 0.8fr;gap:32px;overflow-y:auto;}
+@media(max-width:1024px){.arena-workspace{grid-template-columns:1fr;}}
+
+.workspace-card{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:24px;display:flex;flex-direction:column;margin-bottom:16px;}
+.workspace-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:16px;}
+.workspace-title{font-weight:800;font-size:18px;color:var(--strong);font-family:var(--font-main);}
+
+/* RENDER GAME TIERS & LOGISTIK KEUANGAN */
+.tier-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;}
+.tier-card{
+  background:var(--panel2);border:1px solid var(--border);padding:16px;
+  border-radius:12px;cursor:pointer;transition:all 0.2s;
+}
+.tier-card:hover{border-color:var(--amber);}
+.tier-value{font-weight:800;font-size:16px;color:var(--strong);margin-top:4px;}
+
+/* FINANCIAL HISTORY LIST SYSTEM */
+.history-table{display:flex;flex-direction:column;gap:10px;margin-top:12px;}
+.history-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 16px;background:var(--panel2);border:1px solid var(--border);border-radius:10px;
+}
+.history-meta{display:flex;flex-direction:column;gap:4px;}
+.history-type{font-weight:700;font-size:13px;color:var(--strong);text-transform:uppercase;}
+.history-date{font-size:11px;color:var(--text-dim);font-family:var(--font-mono);}
+.history-amt{font-family:var(--font-mono);font-weight:600;font-size:14px;}
+.history-amt.deposit{color:var(--teal);}
+.history-amt.withdraw{color:var(--red);}
+.badge-status{padding:4px 8px;border-radius:6px;font-size:10px;font-weight:700;font-family:var(--font-mono);}
+.badge-status.success{background:rgba(45,212,191,0.1);color:var(--teal);}
+
+/* MODAL OVERLAYS (AUTH & QRIS COMPONENT) */
+.modal-overlay{position:fixed;inset:0;background:rgba(3,5,8,0.9);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;z-index:1000;visibility:hidden;opacity:0;transition:all 0.25s;}
+.modal-overlay.active{visibility:visible;opacity:1;}
+.modal-window{background:var(--panel);border:1px solid var(--border);border-radius:24px;padding:40px;width:100%;max-width:440px;text-align:center;}
+.modal-window h2{font-weight:800;font-size:22px;color:var(--strong);margin-bottom:8px;}
+
+/* QR CONTAINER GRAPHICS WITH DOWNLOAD HOVER */
+.qris-container-box{
+  background:#fff;padding:24px;border-radius:16px;width:240px;height:240px;
+  margin:24px auto;display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 10px 30px rgba(0,0,0,0.5);
+}
+#qrisRenderArea img{width:100% !important;height:100% !important;}
+
+.input-field{width:100%;padding:14px;background:var(--void);border:1px solid var(--border);border-radius:10px;color:var(--strong);font-family:var(--font-main);font-size:14px;margin-bottom:14px;}
+.input-field:focus{outline:none;border-color:var(--amber);}
+</style>
+</head>
+<body>
+
+<div class="app-container">
+  <nav class="navbar">
+    <div class="brand"><div class="brand-icon"></div>ARENA PRO</div>
+    <div class="session-zone" id="navbarSessionZone">
+      <button class="btn btn-primary" onclick="toggleModalView('authOverlay', 'login')">Masuk Arena</button>
+    </div>
+  </nav>
+
+  <div class="main-wrapper">
+    <aside class="sidebar-games">
+      <div class="sidebar-title">Menu Navigasi</div>
+      <div class="game-tab active" id="tab-dashboard" onclick="toggleMainTab('dashboard')">
+        <div class="game-icon-frame">⚔️</div>
+        <div class="game-info"><span class="game-name">Arena Utama</span></div>
+      </div>
+      <div class="game-tab" id="tab-billing" onclick="toggleMainTab('billing')">
+        <div class="game-icon-frame">💳</div>
+        <div class="game-info"><span class="game-name">Transaksi & History</span></div>
+      </div>
+    </aside>
+
+    <main class="arena-workspace" id="arenaMainScene">
+      <div id="view-dashboard" style="display:contents;">
+        <div class="workspace-card">
+          <div class="workspace-header"><div class="workspace-title">Catur Blitz Arena</div></div>
+          <div style="background:var(--void); border:1px solid var(--border); border-radius:16px; aspect-ratio:1; display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); color:var(--text-dim)">[ GRAPHICAL FIELD READY ]</div>
+        </div>
+        <div class="workspace-card">
+          <div class="workspace-header"><div class="workspace-title">Cari Lawan Cepat</div></div>
+          <div class="tier-grid">
+            <div class="tier-card" onclick="alert('Mencari Match...')"><div class="tier-value">🪙 1.000</div></div>
+            <div class="tier-card" onclick="alert('Mencari Match...')"><div class="tier-value">🪙 5.000</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="view-billing" style="display:none;">
+        <div class="workspace-card">
+          <div class="workspace-header"><div class="workspace-title">Layanan Top-Up QRIS</div></div>
+          <div style="font-size:13px; margin-bottom:12px;">Pilih nominal deposit instan di bawah. Kode QRIS otomatis dikalkulasi langsung oleh sistem.</div>
+          <div class="tier-grid">
+            <div class="tier-card" onclick="initiateQrisRequest(10000)"><div class="tier-value">⚡ Rp 10.000</div></div>
+            <div class="tier-card" onclick="initiateQrisRequest(25000)"><div class="tier-value">⚡ Rp 25.000</div></div>
+            <div class="tier-card" onclick="initiateQrisRequest(50000)"><div class="tier-value">⚡ Rp 50.000</div></div>
+            <div class="tier-card" onclick="initiateQrisRequest(100000)"><div class="tier-value">⚡ Rp 100.000</div></div>
+          </div>
+          
+          <div class="workspace-header" style="margin-top:32px;"><div class="workspace-title">Layanan Penarikan Dana (Withdraw)</div></div>
+          <input type="number" class="input-field" id="wdAmount" placeholder="Jumlah Penarikan (Min. Rp 50.000)">
+          <input type="text" class="input-field" id="wdBank" placeholder="Nama Bank / E-Wallet (e.g., BCA, DANA)">
+          <input type="text" class="input-field" id="wdAccount" placeholder="Nomor Rekening / Nomor HP Tujuan">
+          <button class="btn btn-primary" style="width:100%;" onclick="submitWithdrawalRequest()">Ajukan Penarikan</button>
+        </div>
+
+        <div class="workspace-card">
+          <div class="workspace-header"><div class="workspace-title">Riwayat Mutasi Saldo</div></div>
+          <div class="history-table" id="historyRenderZone">
+            <div style="text-align:center; padding:40px; font-size:12px; color:var(--text-dim);">Silahkan masuk untuk memuat riwayat transaksi anda.</div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="modal-overlay" id="authOverlay">
+  <div class="modal-window">
+    <h2 id="authTitle">Masuk Arena Pro</h2>
+    <div style="margin-bottom:20px;"><button class="btn btn-secondary" style="width:100%;" id="btnGoogleAuth">⚡ Lanjutkan Dengan Google</button></div>
+    <input type="email" class="input-field" id="emailInput" placeholder="Email">
+    <input type="password" class="input-field" id="passwordInput" placeholder="Password">
+    <input type="text" class="input-field" id="usernameInput" placeholder="Username" style="display:none;">
+    <button class="btn btn-primary" style="width:100%;" id="btnEmailSubmit">Konfirmasi</button>
+    <div style="font-size:12px; margin-top:16px; cursor:pointer; color:var(--amber)" id="authSwitchLink" onclick="toggleAuthMode()">Belum punya akun? Daftar disini</div>
+    <button class="btn btn-secondary" style="width:100%; margin-top:12px; background:transparent;" onclick="toggleModalView('authOverlay', 'close')">Batalkan</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="qrisOverlay">
+  <div class="modal-window">
+    <h2>Pembayaran QRIS Antarmuka</h2>
+    <div style="font-size:12px; color:var(--text)">Scan kode QR di bawah menggunakan aplikasi M-Banking atau E-Wallet pilihan anda.</div>
+    
+    <div class="qris-container-box" id="qrisRenderArea"></div>
+    
+    <button class="btn btn-primary" style="width:100%; background:var(--teal); color:var(--void);" onclick="downloadQrisImageAsset()">
+      📥 Download Kode QRIS (PNG)
+    </button>
+    
+    <button class="btn btn-secondary" style="width:100%; margin-top:12px;" onclick="toggleModalView('qrisOverlay', 'close')">Tutup Jendela</button>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+  import { getFirestore, doc, setDoc, getDoc, collection, query, orderBy, onSnapshot, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AlzaSyAvGeziF9PkWMGAv9RF8ZpWK_0eYUHRI",
+    authDomain: "battle-arena-bd9e4.firebaseapp.com",
+    projectId: "battle-arena-bd9e4",
+    storageBucket: "battle-arena-bd9e4.firebasestorage.app",
+    messagingSenderId: "543773004112",
+    appId: "1:543773004112:web:9ebaa2007211a363e4dc55"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  let activeUser = null;
+  let authState = 'login';
+  let historyUnsubscribe = null;
+
+  // GOOGLE IDENTITY LINK
+  document.getElementById('btnGoogleAuth').onclick = async () => {
+    try {
+      const res = await signInWithPopup(auth, new GoogleAuthProvider());
+      await verifyFirestoreAccount(res.user);
+    } catch(e) { alert(e.message); }
+  };
+
+  document.getElementById('btnEmailSubmit').onclick = async () => {
+    const email = document.getElementById('emailInput').value;
+    const pass = document.getElementById('passwordInput').value;
+    const user = document.getElementById('usernameInput').value;
+    try {
+      if(authState === 'register') {
+        const res = await createUserWithEmailAndPassword(auth, email, pass);
+        await verifyFirestoreAccount(res.user, user);
+      } else {
+        await signInWithEmailAndPassword(auth, email, pass);
+      }
+    } catch(e) { alert(e.message); }
+  };
+
+  async function verifyFirestoreAccount(user, fallbackName) {
+    const userRef = doc(db, "users", user.uid);
+    const snap = await getDoc(userRef);
+    if(!snap.exists()) {
+      await setDoc(userRef, {
+        username: fallbackName || user.displayName || user.email.split('@')[0],
+        email: user.email,
+        coinBalance: 10000,
+        createdAt: new Date()
+      });
+    }
+    toggleModalView('authOverlay', 'close');
+  }
+
+  // MONITOR STATUS USER & LIVE TRANSAKSI HISTORY
+  onAuthStateChanged(auth, (user) => {
+    const zone = document.getElementById('navbarSessionZone');
+    if(user) {
+      activeUser = user;
+      onSnapshot(doc(db, "users", user.uid), (docSnap) => {
+        if(docSnap.exists()){
+          zone.innerHTML = `
+            <div class="wallet-badge">🪙 ${docSnap.data().coinBalance.toLocaleString('id-ID')} COIN</div>
+            <div style="font-weight:700; color:var(--strong); font-size:13px;">${docSnap.data().username}</div>
+            <button class="btn btn-secondary" style="padding:6px 12px; font-size:11px;" id="btnSignout">Keluar</button>
+          `;
+          document.getElementById('btnSignout').onclick = () => signOut(auth);
+        }
+      });
+      listenToTransactionHistory(user.uid);
+    } else {
+      activeUser = null;
+      if(historyUnsubscribe) historyUnsubscribe();
+      zone.innerHTML = `<button class="btn btn-primary" onclick="toggleModalView('authOverlay', 'login')">Masuk Arena</button>`;
+      document.getElementById('historyRenderZone').innerHTML = `<div style="text-align:center; padding:40px; font-size:12px; color:var(--text-dim);">Silahkan masuk untuk memuat riwayat transaksi anda.</div>`;
+    }
+  });
+
+  // REAL-TIME FIRESTORE HISTORY ENGINE READ
+  function listenToTransactionHistory(uid) {
+    const q = query(collection(db, "users", uid, "history"), orderBy("timestamp", "desc"));
+    historyUnsubscribe = onSnapshot(q, (snapshot) => {
+      const zone = document.getElementById('historyRenderZone');
+      if(snapshot.empty) {
+        zone.innerHTML = `<div style="text-align:center; padding:40px; font-size:12px; color:var(--text-dim);">Belum ada riwayat transaksi.</div>`;
+        return;
+      }
+      zone.innerHTML = "";
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        const tDate = data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleString('id-ID') : '-';
+        zone.innerHTML += `
+          <div class="history-item">
+            <div class="history-meta">
+              <span class="history-type">${data.type}</span>
+              <span class="history-date">${tDate}</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:12px;">
+              <span class="history-amt ${data.type}">Rp ${data.amount.toLocaleString('id-ID')}</span>
+              <span class="badge-status success">${data.status}</span>
+            </div>
+          </div>
+        `;
+      });
+    });
+  }
+
+  // EKSEKUSI PEMBUATAN NOTIFIKASI INVOICE QRIS VIA MIDTRANS
+  window.initiateQrisRequest = async (nominal) => {
+    if(!activeUser) return toggleModalView('authOverlay', 'login');
+    alert("Membuat kode QRIS, mohon tunggu...");
+
+    try {
+      const userSnap = await getDoc(doc(db, "users", activeUser.uid));
+      const response = await fetch('/api/charge', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ uid: activeUser.uid, username: userSnap.data().username, amount: nominal })
+      });
+      const paymentData = await response.json();
+
+      // RENDER QR CODE PADA POPUP DENGAN URL PEMBAYARAN MIDTRANS
+      const renderZone = document.getElementById('qrisRenderArea');
+      renderZone.innerHTML = "";
+      new QRCode(renderZone, { text: paymentData.redirect_url, width: 200, height: 200 });
+
+      toggleModalView('qrisOverlay', 'open');
+    } catch(e) { alert("Error membuat transaksi: " + e.message); }
+  };
+
+  // LOGIKA SUBMIT WITHDRAW KE FIRESTORE (Akan divalidasi manual oleh Admin via Admin Panel)
+  window.submitWithdrawalRequest = async () => {
+    if(!activeUser) return toggleModalView('authOverlay', 'login');
+    const amt = parseInt(document.getElementById('wdAmount').value);
+    const bank = document.getElementById('wdBank').value;
+    const acc = document.getElementById('wdAccount').value;
+
+    if(!amt || !bank || !acc) return alert("Harap isi semua form penarikan!");
+    if(amt < 50000) return alert("Minimal penarikan dana adalah Rp 50.000!");
+
+    const userRef = doc(db, "users", activeUser.uid);
+    const userSnap = await getDoc(userRef);
+    
+    if(userSnap.data().coinBalance < amt) return alert("Saldo koin anda tidak mencukupi untuk withdraw nominal ini!");
+
+    // Potong koin user dan masukkan ke log pending withdraw
+    await setDoc(userRef, { coinBalance: userSnap.data().coinBalance - amt }, { merge: true });
+    await addDoc(collection(db, "users", activeUser.uid, "history"), {
+      type: 'withdraw',
+      amount: amt,
+      status: 'PENDING (Proses Admin)',
+      timestamp: new Date(),
+      details: `${bank} - ${acc}`
+    });
+
+    alert("Permintaan penarikan berhasil diajukan! Koin Anda dipotong dan sedang diproses manual oleh tim Admin.");
+    document.getElementById('wdAmount').value = "";
+    document.getElementById('wdBank').value = "";
+    document.getElementById('wdAccount').value = "";
+  };
+</script>
+
+<script>
+  // UTILITY VIEW INTERACTION INTERFACE
+  function toggleMainTab(tabId) {
+    document.querySelectorAll('.game-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(`tab-${tabId}`).classList.add('active');
+    if(tabId === 'dashboard') {
+      document.getElementById('view-dashboard').style.display = 'contents';
+      document.getElementById('view-billing').style.display = 'none';
+    } else {
+      document.getElementById('view-dashboard').style.display = 'none';
+      document.getElementById('view-billing').style.display = 'contents';
+    }
+  }
+
+  function toggleModalView(modalId, action) {
+    const m = document.getElementById(modalId);
+    if(action === 'close') m.classList.remove('active');
+    else m.classList.add('active');
+  }
+
+  function toggleAuthMode() {
+    const title = document.getElementById('authTitle');
+    const uInput = document.getElementById('usernameInput');
+    const link = document.getElementById('authSwitchLink');
+    const submitBtn = document.getElementById('btnEmailSubmit');
+    
+    // Switch login/register state
+    const currentScript = document.getElementById('btnEmailSubmit').parentNode;
+    const isLogin = title.innerText === "Masuk Arena Pro";
+    
+    if(isLogin) {
+      title.innerText = "Daftar Akun Baru";
+      uInput.style.display = "block";
+      link.innerHTML = "Sudah punya akun? Masuk disini";
+      window.authState = 'register';
+    } else {
+      title.innerText = "Masuk Arena Pro";
+      uInput.style.display = "none";
+      link.innerHTML = "Belum punya akun? Daftar disini";
+      window.authState = 'login';
+    }
+  }
+
+  // CORE LOGIC: DOWNLOAD QR CODE DARI KANVAS / IMAGE ASSET SECARA INSTAN
+  function downloadQrisImageAsset() {
+    const qrImage = document.querySelector('#qrisRenderArea img');
+    if(!qrImage) return alert("Gambar QRIS belum siap diunduh!");
+    
+    const downloadLink = document.createElement('a');
+    downloadLink.href = qrImage.src;
+    downloadLink.download = `ARENA-QRIS-INVOICE-${Date.now()}.png`;
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+  }
+</script>
+</body>
+</html>
