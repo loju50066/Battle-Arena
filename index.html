@@ -8,110 +8,192 @@
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <!-- FontAwesome untuk Ikon -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts: Orbitron (Empire) & Bangers (Komik) -->
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Orbitron:wght@500;800;900&display=swap" rel="stylesheet">
+  
   <style>
-    /* Transisi untuk sidebar di mobile */
-    #sidebar {
-      transition: transform 0.3s ease-in-out;
+    .font-empire { font-family: 'Orbitron', sans-serif; }
+    .font-comic { font-family: 'Bangers', cursive; tracking-wide: 0.05em; }
+    #sidebar { transition: transform 0.3s ease-in-out; }
+    .pulse-animation { animation: pulse 1.5s infinite; }
+    @keyframes pulse {
+      0% { opacity: 0.7; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.02); }
+      100% { opacity: 0.7; transform: scale(1); }
     }
   </style>
 </head>
-<body class="bg-[#0b0f19] text-gray-200 font-sans">
+<body class="bg-[#0b0f19] text-gray-200 font-sans select-none">
 
   <!-- TOP NAVBAR -->
   <header class="bg-[#111827] border-b border-gray-800 px-4 py-3 flex justify-between items-center sticky top-0 z-50">
     <div class="flex items-center gap-3">
-      <!-- Tombol Hamburger Mobile -->
-      <button id="menuBtn" class="text-gray-400 hover:text-white text-xl focus:outline-none">
+      <button id="menuBtn" class="text-gray-400 hover:text-white text-xl focus:outline-none p-1">
         <i class="fas fa-bars"></i>
       </button>
       <div class="flex items-center gap-2">
-        <div class="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center font-bold text-gray-900">A</div>
-        <span class="text-xl font-black tracking-wider text-white">ARENA PRO</span>
+        <div class="w-8 h-8 bg-gradient-to-br from-amber-400 to-orange-600 rounded-lg flex items-center justify-center font-black text-gray-950 font-empire text-lg shadow-md shadow-orange-600/20">A</div>
+        <span class="text-2xl font-black tracking-wider bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent font-empire">ARENA PRO</span>
       </div>
     </div>
     
-    <button id="loginBtn" class="bg-amber-500 hover:bg-amber-600 text-gray-900 font-bold px-4 py-2 rounded-lg transition text-sm flex items-center gap-2">
-      <i class="fab fa-google"></i> Masuk Arena
+    <button id="loginBtn" class="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-gray-950 font-black px-5 py-2 rounded-xl transition text-sm flex items-center gap-2 font-empire shadow-lg shadow-orange-500/20 cursor-pointer">
+      <i class="fab fa-google"></i> MASUK ARENA
     </button>
   </header>
 
   <div class="flex">
-    <!-- SIDEBAR NAVIGASI (Bisa buka/tutup otomatis) -->
-    <aside id="sidebar" class="fixed inset-y-0 left-0 transform -translate-x-full z-40 w-64 bg-[#111827] border-r border-gray-800 p-4 pt-20 flex flex-col justify-between md:relative md:translate-x-0 md:pt-6 h-[calc(100vh-61px)]">
+    <!-- SIDEBAR NAVIGASI -->
+    <aside id="sidebar" class="fixed inset-y-0 left-0 transform -translate-x-full z-40 w-64 bg-[#111827] border-r border-gray-800 p-4 pt-16 flex flex-col justify-between md:relative md:translate-x-0 md:pt-6 h-[calc(100vh-61px)]">
       <div>
-        <!-- Tombol Close internal khusus Mobile -->
-        <button id="closeSidebarBtn" class="absolute top-4 right-4 text-gray-400 hover:text-white md:hidden">
-          <i class="fas fa-times text-xl"></i>
-        </button>
+        <div class="flex justify-between items-center mb-6 md:hidden">
+          <span class="text-xs font-black text-gray-500 uppercase tracking-widest font-empire">Navigasi</span>
+          <button id="closeSidebarBtn" class="text-gray-400 hover:text-white p-1">
+            <i class="fas fa-times text-xl"></i>
+          </button>
+        </div>
 
-        <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Menu Navigasi</p>
+        <p class="text-xs font-black text-gray-500 uppercase tracking-widest mb-4 hidden md:block font-empire">Menu Navigasi</p>
         <nav class="space-y-2">
           <a href="#" class="flex items-center gap-3 px-4 py-3 bg-gray-800/60 border border-gray-700/50 text-white rounded-xl font-medium transition">
             <span class="p-2 bg-amber-500/10 text-amber-500 rounded-lg text-sm">⚔️</span>
-            <span>Arena Utama</span>
+            <span class="font-empire text-sm tracking-wide">ARENA MATCH</span>
           </a>
           <a href="#" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-800/40 text-gray-400 hover:text-white rounded-xl font-medium transition">
             <span class="p-2 bg-gray-800 text-gray-400 rounded-lg text-sm">💳</span>
-            <span>Transaksi & History</span>
+            <span class="font-empire text-sm tracking-wide">HISTORY & DEPO</span>
           </a>
         </nav>
       </div>
       
-      <!-- Info Akun Simple di Bawah Sidebar -->
+      <!-- Info Akun Player -->
       <div id="userProfile" class="hidden border-t border-gray-800 pt-4 flex items-center gap-3">
-        <img id="userAvatar" src="" alt="Avatar" class="w-10 h-10 rounded-full border border-amber-500">
+        <img id="userAvatar" src="" alt="Avatar" class="w-10 h-10 rounded-full border-2 border-amber-500 shadow-md shadow-amber-500/10">
         <div class="overflow-hidden">
-          <p id="userName" class="text-sm font-bold text-white truncate"></p>
-          <p id="userCoins" class="text-xs text-amber-500 font-semibold">🪙 0 Koin</p>
+          <p id="userName" class="text-sm font-bold text-white truncate font-empire"></p>
+          <p id="userCoins" class="text-sm text-amber-400 font-black font-comic tracking-wide">🪙 0 KOIN</p>
         </div>
       </div>
     </aside>
 
-    <!-- Overlay latar belakang hitam saat menu mobile terbuka -->
-    <div id="overlay" class="fixed inset-0 bg-black/50 z-30 hidden md:hidden"></div>
+    <div id="overlay" class="fixed inset-0 bg-black/60 z-30 hidden md:hidden"></div>
 
     <!-- MAIN CONTENT CONTAINER -->
     <main class="flex-1 p-4 md:p-6 min-h-[calc(100vh-61px)]">
-      <!-- Section Konten Utama -->
       <div class="max-w-4xl mx-auto space-y-6">
         
-        <!-- Info Ringkas -->
-        <div class="bg-gradient-to-r from-gray-900 to-slate-900 p-6 rounded-2xl border border-gray-800 shadow-xl">
-          <h1 class="text-2xl font-black text-white mb-2">Selamat Datang di Arena Turnamen</h1>
-          <p class="text-gray-400 text-sm">Silakan masuk menggunakan akun Google lu untuk mulai bertanding dan mengumpulkan koin kemenangan.</p>
+        <!-- Info Panel Atas -->
+        <div class="bg-gradient-to-br from-gray-900 via-[#111827] to-slate-900 p-6 rounded-2xl border border-gray-800 shadow-2xl relative overflow-hidden">
+          <div class="absolute -right-10 -bottom-10 opacity-5 text-9xl font-comic">BATTLE</div>
+          <h1 class="text-3xl font-black text-white mb-2 font-comic tracking-wider text-amber-400">ROOM TARUHAN ARENA PRO</h1>
+          <p class="text-gray-400 text-xs font-empire tracking-wide">PILIH NOMINAL TARUHAN, CARI LAWAN TANDING, DAN DOMINASI ARENA ENEMY REAL-TIME!</p>
         </div>
 
-        <!-- Contoh Tampilan Board Game -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div class="bg-[#111827] border border-gray-800 p-5 rounded-xl space-y-3">
-            <div class="text-lg font-bold text-white flex justify-between items-center">
-              <span>Catur Kilat Pro</span>
-              <span class="text-xs bg-red-500/10 text-red-500 px-2 py-1 rounded-md">LIVE</span>
-            </div>
-            <p class="text-gray-400 text-xs">[ GRAND TOURNAMENT ] Ready untuk 64 Pemain.</p>
-            <button class="w-full bg-gray-800 hover:bg-gray-700 text-white font-semibold py-2 rounded-lg text-sm transition">Lihat Detail</button>
+        <!-- PANEL PILIHAN BET NOMINAL -->
+        <div class="bg-[#111827] border border-gray-800 p-5 rounded-2xl shadow-xl space-y-4">
+          <h2 class="text-sm font-black text-gray-400 font-empire tracking-widest uppercase">
+            1. Pilih Nominal Taruhan (Koin):
+          </h2>
+          
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <button class="bet-option bg-gray-800/80 hover:bg-gray-700/80 text-white font-black py-4 px-4 rounded-xl border-2 border-transparent transition text-center flex flex-col items-center justify-center gap-1 cursor-pointer shadow-md" data-amount="1000">
+              <span class="text-xs text-gray-500 font-empire uppercase">BET</span>
+              <span class="text-2xl text-amber-400 font-comic">🪙 1.000</span>
+            </button>
+            <button class="bet-option bg-gray-800/80 hover:bg-gray-700/80 text-white font-black py-4 px-4 rounded-xl border-2 border-transparent transition text-center flex flex-col items-center justify-center gap-1 cursor-pointer shadow-md" data-amount="2000">
+              <span class="text-xs text-gray-500 font-empire uppercase">BET</span>
+              <span class="text-2xl text-amber-400 font-comic">🪙 2.000</span>
+            </button>
+            <button class="bet-option bg-gray-800/80 hover:bg-gray-700/80 text-white font-black py-4 px-4 rounded-xl border-2 border-transparent transition text-center flex flex-col items-center justify-center gap-1 cursor-pointer shadow-md" data-amount="5000">
+              <span class="text-xs text-gray-500 font-empire uppercase">BET</span>
+              <span class="text-2xl text-amber-400 font-comic">🪙 5.000</span>
+            </button>
+            <button class="bet-option bg-gray-800/80 hover:bg-gray-700/80 text-white font-black py-4 px-4 rounded-xl border-2 border-transparent transition text-center flex flex-col items-center justify-center gap-1 cursor-pointer shadow-md" data-amount="10000">
+              <span class="text-xs text-gray-500 font-empire uppercase">BET</span>
+              <span class="text-2xl text-amber-400 font-comic">🪙 10.000</span>
+            </button>
+            <button class="bet-option bg-gray-800/80 hover:bg-gray-700/80 text-white font-black py-4 px-4 rounded-xl border-2 border-transparent transition text-center flex flex-col items-center justify-center gap-1 cursor-pointer shadow-md" data-amount="50000">
+              <span class="text-xs text-gray-500 font-empire uppercase">BET</span>
+              <span class="text-2xl text-amber-400 font-comic">🪙 50.000</span>
+            </button>
+            <button class="bet-option bg-gray-800/80 hover:bg-gray-700/80 text-white font-black py-4 px-4 rounded-xl border-2 border-transparent transition text-center flex flex-col items-center justify-center gap-1 cursor-pointer shadow-md" data-amount="100000">
+              <span class="text-xs text-gray-500 font-empire uppercase">BET</span>
+              <span class="text-2xl text-amber-400 font-comic">🪙 100.000</span>
+            </button>
           </div>
+        </div>
 
-          <div class="bg-[#111827] border border-gray-800 p-5 rounded-xl space-y-3">
-            <div class="text-lg font-bold text-white flex justify-between items-center">
-              <span>Cari Matchmaking</span>
-              <span class="text-xs bg-amber-500/10 text-amber-500 px-2 py-1 rounded-md">🪙 1.000 / Match</span>
-            </div>
-            <p class="text-gray-400 text-xs">Temukan lawan tanding seimbang secara instan.</p>
-            <button class="w-full bg-amber-500 hover:bg-amber-600 text-gray-900 font-bold py-2 rounded-lg text-sm transition">Main Sekarang</button>
+        <!-- ACTION BOX -->
+        <div class="bg-[#111827] border border-gray-800 p-6 rounded-2xl text-center space-y-4 shadow-xl">
+          <div id="statusText" class="text-gray-400 text-xs font-empire tracking-wider uppercase">
+            Silakan pilih nominal taruhan di atas untuk mengaktifkan sistem tanding.
           </div>
+          
+          <button id="playBtn" disabled class="w-full sm:w-72 mx-auto bg-gray-700 text-gray-500 font-black py-4 rounded-xl text-xl tracking-wider transition uppercase shadow-lg font-comic cursor-not-allowed flex items-center justify-center gap-2 border-b-4 border-gray-900 active:border-b-0 transform active:translate-y-1">
+            <i class="fas fa-gamepad"></i> MAIN SEKARANG
+          </button>
         </div>
 
       </div>
     </main>
   </div>
 
-  <!-- Firebase Scripts (v8 Compatibility Mode) -->
+  <!-- IN-GAME INTERFACE SCREEN FULLSCREEN -->
+  <div id="inGameScreen" class="fixed inset-0 bg-[#070a12] z-50 hidden flex flex-col justify-between p-4 md:p-6">
+    <div class="flex justify-between items-center bg-[#111827] border border-gray-800 p-3 rounded-xl shadow-lg">
+      <div class="flex items-center gap-2">
+        <span class="w-3 h-3 rounded-full bg-red-500 pulse-animation"></span>
+        <span id="matchHeaderStatus" class="font-empire text-xs font-black tracking-widest text-gray-400">MENCARI LAWAN...</span>
+      </div>
+      <div id="gameBetStatus" class="font-comic text-xl text-amber-400">BET: 🪙 0</div>
+      <button id="surrenderBtn" class="bg-red-600 hover:bg-red-700 text-white font-black px-4 py-2 rounded-lg text-xs font-empire tracking-wider transition cursor-pointer">
+        SURRENDER
+      </button>
+    </div>
+
+    <div class="flex-1 my-4 bg-gradient-to-b from-[#111827] to-[#0e1420] border-2 border-orange-500/30 rounded-2xl flex flex-col items-center justify-center relative shadow-inner overflow-hidden">
+      <div class="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none">
+        <i class="fas fa-shield-alt text-[30vw]"></i>
+      </div>
+
+      <div class="text-center space-y-6 z-10 p-4">
+        <div class="flex items-center justify-center gap-8 md:gap-16">
+          <!-- Player 1 (Lu) -->
+          <div class="text-center space-y-2">
+            <img id="p1Avatar" src="" class="w-16 h-16 md:w-20 md:h-20 rounded-full border-4 border-amber-500 mx-auto shadow-lg shadow-amber-500/20" alt="Me">
+            <p id="p1Name" class="text-sm font-black font-empire text-white max-w-[100px] truncate"></p>
+            <span class="text-xs font-bold px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30 font-empire">YOU</span>
+          </div>
+
+          <div class="font-comic text-4xl md:text-6xl text-orange-500 italic font-black transform -rotate-12 animate-bounce">VS</div>
+
+          <!-- Player 2 (Lawan Asli) -->
+          <div class="text-center space-y-2 opacity-0 transition-opacity duration-500" id="opponentBox">
+            <img id="p2Avatar" src="" class="w-16 h-16 md:w-20 md:h-20 rounded-full border-4 border-red-500 mx-auto shadow-lg shadow-red-500/20" alt="Enemy">
+            <p id="p2Name" class="text-sm font-black font-empire text-white max-w-[100px] truncate">Mencari...</p>
+            <span class="text-xs font-bold px-2 py-0.5 bg-red-500/20 text-red-400 rounded border border-red-500/30 font-empire">ENEMY</span>
+          </div>
+        </div>
+
+        <div id="gameStatusAlert" class="font-comic text-2xl md:text-4xl text-white tracking-wide uppercase mt-4">
+          Menghubungkan ke Server Arena...
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-[#111827] border border-gray-800 p-3 rounded-xl flex justify-between items-center text-xs font-empire text-gray-500 tracking-wider">
+      <span>PING: 18ms</span>
+      <span>ARENA PVP ENGINE V2.0 REALTIME</span>
+    </div>
+  </div>
+
+  <!-- Firebase v8 Scripts -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
   <script>
-    // 1. KONFIGURASI FIREBASE (Sudah diperbaiki format bahasa pemrogramannya)
+    // CONFIG DATABASE FIREBASE
     const firebaseConfig = {
       apiKey: "AIzaSyAvGeziF9PkZpWMGAv9RF8ZpWK_0eYUHRI", 
       authDomain: "battle-arena-bd9e4.firebaseapp.com", 
@@ -122,77 +204,265 @@
       measurementId: "G-FVKSFX7B8W" 
     };
 
-    // Inisialisasi Firebase
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
     }
     const auth = firebase.auth();
+    const db = firebase.firestore(); // Aktifkan Firestore SDK
 
-    // 2. LOGIKA SIDEBAR RESPONSIF (Solusi tab tidak bisa ditutup di HP seperti gambar 99575.jpg)
+    // ENGINE VARIABLES
+    let selectedAmount = 0;
+    let isSearching = false;
+    let currentMatchId = null;
+    let unsubscribeMatch = null;
+    let currentQueueId = null;
+
+    // DOM ELEMENTS
     const menuBtn = document.getElementById('menuBtn');
     const closeSidebarBtn = document.getElementById('closeSidebarBtn');
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('overlay');
-
-    function toggleSidebar() {
-      sidebar.classList.toggle('-translate-x-full');
-      overlay.classList.toggle('hidden');
-    }
-
-    menuBtn.addEventListener('click', toggleSidebar);
-    closeSidebarBtn.addEventListener('click', toggleSidebar);
-    overlay.addEventListener('click', toggleSidebar);
-
-    // 3. LOGIKA LOGIN GOOGLE
+    const betOptions = document.querySelectorAll('.bet-option');
+    const playBtn = document.getElementById('playBtn');
+    const statusText = document.getElementById('statusText');
     const loginBtn = document.getElementById('loginBtn');
     const userProfile = document.getElementById('userProfile');
     const userAvatar = document.getElementById('userAvatar');
     const userName = document.getElementById('userName');
 
+    // IN GAME OVERLAY ELEMENTS
+    const inGameScreen = document.getElementById('inGameScreen');
+    const gameBetStatus = document.getElementById('gameBetStatus');
+    const gameStatusAlert = document.getElementById('gameStatusAlert');
+    const opponentBox = document.getElementById('opponentBox');
+    const surrenderBtn = document.getElementById('surrenderBtn');
+    const p1Name = document.getElementById('p1Name');
+    const p1Avatar = document.getElementById('p1Avatar');
+    const p2Name = document.getElementById('p2Name');
+    const p2Avatar = document.getElementById('p2Avatar');
+    const matchHeaderStatus = document.getElementById('matchHeaderStatus');
+
+    // 1. SIDEBAR TOGGLE HP
+    function toggleSidebar() {
+      sidebar.classList.toggle('-translate-x-full');
+      overlay.classList.toggle('hidden');
+    }
+    menuBtn.addEventListener('click', toggleSidebar);
+    closeSidebarBtn.addEventListener('click', toggleSidebar);
+    overlay.addEventListener('click', toggleSidebar);
+
+    // 2. SELEKSI BET AMOUNT
+    betOptions.forEach(button => {
+      button.addEventListener('click', () => {
+        if (!auth.currentUser) {
+          alert("Woi! Login dulu lewat tombol 'MASUK ARENA' di kanan atas!");
+          return;
+        }
+        if (isSearching) return;
+
+        betOptions.forEach(btn => {
+          btn.classList.remove('border-orange-500', 'bg-orange-500/10');
+          btn.classList.add('bg-gray-800/80');
+        });
+
+        button.classList.remove('bg-gray-800/80');
+        button.classList.add('border-orange-500', 'bg-orange-500/10');
+
+        selectedAmount = parseInt(button.getAttribute('data-amount'));
+        statusText.innerHTML = `SIAP BERTANDING DENGAN TARUHAN <span class="text-amber-400 font-comic text-lg">🪙 ${selectedAmount.toLocaleString()}</span> KOIN.`;
+        
+        playBtn.disabled = false;
+        playBtn.classList.remove('bg-gray-700', 'text-gray-500', 'cursor-not-allowed');
+        playBtn.classList.add('bg-gradient-to-r', 'from-amber-500', 'to-orange-500', 'text-gray-950', 'hover:from-amber-600', 'hover:to-orange-600', 'cursor-pointer');
+      });
+    });
+
+    // 3. REALTIME PVP MATCHMAKING LOGIC
+    playBtn.addEventListener('click', () => {
+      if (!auth.currentUser || selectedAmount === 0) return;
+
+      if (!isSearching) {
+        startRealtimeMatchmaking();
+      } else {
+        cancelMatchmaking();
+      }
+    });
+
+    async function startRealtimeMatchmaking() {
+      isSearching = true;
+      const user = auth.currentUser;
+
+      // Update UI utama ke mode mencari
+      playBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> MENCARI LAWAN...`;
+      playBtn.classList.replace('from-amber-500', 'from-red-600');
+      playBtn.classList.replace('to-orange-500', 'to-red-700');
+      playBtn.classList.add('pulse-animation');
+      statusText.innerHTML = `<span class="text-orange-500 font-empire font-black animate-pulse">MEMINDAL SERVER ANTRIAN...</span>`;
+      betOptions.forEach(btn => btn.disabled = true);
+
+      // Buka tab layar Fullscreen langsung (Status: Menunggu Antrean)
+      p1Name.textContent = user.displayName || "Player Pro";
+      p1Avatar.src = user.photoURL || "https://via.placeholder.com/150";
+      gameBetStatus.textContent = `BET: 🪙 ${selectedAmount.toLocaleString()}`;
+      gameStatusAlert.textContent = "MEMASUKI ANTRIAN MATCH... SEBENTAR YA";
+      inGameScreen.classList.remove('hidden');
+      
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      }
+
+      try {
+        // Cari apakah ada player lain yang nunggu di room bet yang sama
+        const queueSnapshot = await db.collection('queues')
+          .where('amount', '==', selectedAmount)
+          .where('status', '==', 'waiting')
+          .limit(1)
+          .get();
+
+        if (!queueSnapshot.empty) {
+          // KETEMU LAWAN! Gabung ke match milik player tersebut
+          const hostQueue = queueSnapshot.docs[0];
+          const hostData = hostQueue.data();
+
+          if (hostData.userId === user.uid) return; // Mencegah ketemu diri sendiri
+
+          currentMatchId = hostQueue.id; // Gunakan ID queue sebagai ID Match bersama
+
+          // Update status antrean agar match terkunci (Close)
+          await db.collection('queues').doc(currentMatchId).update({
+            status: 'playing',
+            player2: {
+              uid: user.uid,
+              name: user.displayName,
+              photo: user.photoURL
+            }
+          });
+
+          listenToMatchUpdates(currentMatchId);
+
+        } else {
+          // BELUM ADA LAWAN: Lu jadi Host, buat antrean baru
+          currentQueueId = user.uid + "_" + Date.now();
+          currentMatchId = currentQueueId;
+
+          await db.collection('queues').doc(currentQueueId).set({
+            amount: selectedAmount,
+            status: 'waiting',
+            userId: user.uid,
+            player1: {
+              uid: user.uid,
+              name: user.displayName,
+              photo: user.photoURL
+            },
+            player2: null
+          });
+
+          listenToMatchUpdates(currentQueueId);
+        }
+
+      } catch (err) {
+        console.error(err);
+        alert("Gagal terhubung ke server Firestore database!");
+        cancelMatchmaking();
+      }
+    }
+
+    // Pendengar Data Real-time (OnSnapshot Firestore)
+    function listenToMatchUpdates(matchId) {
+      unsubscribeMatch = db.collection('queues').doc(matchId).onSnapshot((doc) => {
+        if (!doc.exists) return;
+        const matchData = doc.data();
+
+        // Jika player ke-2 sudah masuk
+        if (matchData.status === 'playing' && matchData.player2) {
+          matchHeaderStatus.textContent = "MATCH BERLANGSUNG";
+          
+          // Tampilkan data lawan berdasarkan posisi lu (P1 atau P2)
+          const isAmIPlayer1 = matchData.player1.uid === auth.currentUser.uid;
+          const opponent = isAmIPlayer1 ? matchData.player2 : matchData.player1;
+
+          p2Name.textContent = opponent.name || "Lawan Arena";
+          p2Avatar.src = opponent.photo || "https://via.placeholder.com/150";
+          
+          opponentBox.classList.remove('opacity-0');
+          gameStatusAlert.textContent = "GAME STARTED! PVP REAL-TIME READY! ⚔️";
+          gameStatusAlert.classList.add('text-amber-400');
+        }
+      });
+    }
+
+    // 4. CANCEL MATCHMAKING / SURRENDER SYSTEM
+    async function cancelMatchmaking() {
+      isSearching = false;
+      
+      // Matikan pemantau Firestore
+      if (unsubscribeMatch) unsubscribeMatch();
+      
+      // Hapus data antrean dari database jika lu adalah host
+      if (currentMatchId) {
+        await db.collection('queues').doc(currentMatchId).delete().catch(() => {});
+      }
+
+      currentMatchId = null;
+
+      // Reset komponen antarmuka
+      playBtn.innerHTML = `<i class="fas fa-gamepad"></i> MAIN SEKARANG`;
+      playBtn.classList.replace('from-red-600', 'from-amber-500');
+      playBtn.classList.replace('to-red-700', 'to-orange-500');
+      playBtn.classList.remove('pulse-animation');
+      statusText.innerHTML = `SIAP BERTANDING DENGAN TARUHAN <span class="text-amber-400 font-comic text-lg">🪙 ${selectedAmount.toLocaleString()}</span> KOIN.`;
+      betOptions.forEach(btn => btn.disabled = false);
+
+      inGameScreen.classList.add('hidden');
+      opponentBox.classList.add('opacity-0');
+      matchHeaderStatus.textContent = "MENCARI LAWAN...";
+      gameStatusAlert.textContent = "Menghubungkan ke Server Arena...";
+      gameStatusAlert.classList.remove('text-amber-400');
+
+      if (document.fullscreenElement) {
+        document.exitFullscreen().catch(() => {});
+      }
+    }
+
+    surrenderBtn.addEventListener('click', () => {
+      if (confirm("Lu yakin mau keluar/nyerah dari pertarungan PVP ini?")) {
+        cancelMatchmaking();
+      }
+    });
+
+    // 5. GOOGLE AUTHENTICATION SYSTEM
     loginBtn.addEventListener('click', () => {
-      // Jika statusnya mau Logout
       if (auth.currentUser) {
         auth.signOut().then(() => {
+          cancelMatchmaking();
           alert("Berhasil keluar dari arena!");
-        }).catch((err) => {
-          console.error("Gagal logout:", err);
         });
         return;
       }
-
-      // Proses Login Google Popup
       const provider = new firebase.auth.GoogleAuthProvider();
-      auth.signInWithPopup(provider)
-        .then((result) => {
-          console.log("User terotentikasi:", result.user);
-        })
-        .catch((error) => {
-          console.error("Error login Google:", error);
-          alert("Gagal Login: " + error.message + "\n\nPastikan link Vercel ini sudah didaftarkan di Authorized Domains Firebase Console!");
-        });
+      auth.signInWithPopup(provider).catch((error) => {
+        alert("Gagal Login Google: " + error.message);
+      });
     });
 
-    // Memantau Perubahan Status Login User
     auth.onAuthStateChanged((user) => {
       if (user) {
-        // Jika User Berhasil Login
-        loginBtn.innerHTML = `<i class="fas fa-sign-out-alt"></i> Keluar`;
-        loginBtn.classList.replace('bg-amber-500', 'bg-red-600');
-        loginBtn.classList.replace('text-gray-900', 'text-white');
-        loginBtn.classList.replace('hover:bg-amber-600', 'hover:bg-red-700');
+        loginBtn.innerHTML = `<i class="fas fa-sign-out-alt"></i> KELUAR`;
+        loginBtn.classList.replace('from-amber-500', 'from-red-600');
+        loginBtn.classList.replace('to-orange-500', 'to-red-700');
+        loginBtn.classList.replace('text-gray-950', 'text-white');
         
-        // Tampilkan info profil di bawah sidebar
         userName.textContent = user.displayName || "Pemain Arena";
         userAvatar.src = user.photoURL || "https://via.placeholder.com/150";
         userProfile.classList.remove('hidden');
       } else {
-        // Jika User Logout / Belum Login
-        loginBtn.innerHTML = `<i class="fab fa-google"></i> Masuk Arena`;
-        loginBtn.classList.replace('bg-red-600', 'bg-amber-500');
-        loginBtn.classList.replace('text-white', 'text-gray-900');
-        loginBtn.classList.replace('hover:bg-red-700', 'hover:bg-amber-600');
+        loginBtn.innerHTML = `<i class="fab fa-google"></i> MASUK ARENA`;
+        loginBtn.classList.replace('from-red-600', 'from-amber-500');
+        loginBtn.classList.replace('to-red-700', 'to-orange-500');
+        loginBtn.classList.replace('text-white', 'text-gray-950');
         
         userProfile.classList.add('hidden');
+        cancelMatchmaking();
       }
     });
   </script>
