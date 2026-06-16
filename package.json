@@ -1,6 +1,8 @@
 {
   "name": "arena-pro-backend",
   "version": "1.0.0",
+  "description": "Backend engine platform multi-game server real-time layout",
+  "main": "api/withdraw.js",
   "dependencies": {
     "xendit-node": "^1.11.0"
   }
