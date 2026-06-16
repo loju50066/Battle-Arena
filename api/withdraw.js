@@ -16,7 +16,6 @@ export default async function handler(req, res) {
   const { uid, amount, bankCode, accountNumber, accountName } = req.body;
 
   try {
-    // REGEX SANITASI NOMOR REKENING / HP OTOMATIS
     let cleanAccountNumber = accountNumber.replace(/\D/g, '');
 
     if (bankCode === 'DANA') {
@@ -28,7 +27,6 @@ export default async function handler(req, res) {
       }
     }
 
-    // REVISED: POTONGAN 10% DI WITHDRAW DIHAPUS TOTAL (DANA DITRANSFER UTUH)
     const jumlahUangDitransfer = amount; 
 
     const payoutResponse = await payoutEngine.createPayout({
